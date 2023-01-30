@@ -1,4 +1,4 @@
-import 'Components/ScrumBoard/ScrumBoard.dart';
+import 'ScrumBoard/ScrumBoard.dart';
 
 var appRoutes = {
   '/': (context) => const ScrumBoard(),

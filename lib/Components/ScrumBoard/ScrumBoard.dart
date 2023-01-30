@@ -9,12 +9,23 @@ class ScrumBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
+      body: ListView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.all(8),
         children: [
           const ScrumBoardColumn(
             header: 'test',
-          )
+          ),
+          const ScrumBoardColumn(
+            header: 'test',
+          ),
         ],
+      ),
+      floatingActionButton: const FloatingActionButton(
+        onPressed: null,
+        child: Icon(
+          Icons.add,
+        ),
       ),
     );
   }

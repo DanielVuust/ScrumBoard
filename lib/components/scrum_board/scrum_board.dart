@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:scrumboard/components/scrum_board/scrum_board_column.dart';
-import 'package:flutter/material.dart';
+import 'package:scrumboard/Components/scrum_board/scrum_board_column.dart';
+import 'package:scrumboard/main.dart';
 
 class ScrumBoard extends StatelessWidget {
   const ScrumBoard({super.key});
@@ -8,6 +8,9 @@ class ScrumBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Scrum Board"),
+      ),
       body: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.all(8),

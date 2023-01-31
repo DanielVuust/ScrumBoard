@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 var appTheme = ThemeData(
-  brightness: Brightness.light,
-  // textTheme: GoogleFonts.montserratTextTheme(theme.textTheme);
-);
+    brightness: Brightness.light,
+    primaryColor: const Color(0xFF000A1F),
+    appBarTheme: const AppBarTheme(color: Color(0xFF000A1F))
+    // textTheme: GoogleFonts.montserratTextTheme(theme.textTheme);
+    );

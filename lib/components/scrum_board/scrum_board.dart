@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:scrumboard/Components/ScrumBoard/ScrumBoardColumn.dart';
+import 'package:scrumboard/components/scrum_board/scrum_board_column.dart';
+import 'package:flutter/material.dart';
 
 class ScrumBoard extends StatelessWidget {
   const ScrumBoard({super.key});
@@ -12,12 +11,18 @@ class ScrumBoard extends StatelessWidget {
       body: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.all(8),
-        children: [
-          const ScrumBoardColumn(
-            header: 'test',
+        children: const [
+          ScrumBoardColumn(
+            header: 'To Do',
           ),
-          const ScrumBoardColumn(
-            header: 'test',
+          ScrumBoardColumn(
+            header: 'In Progress',
+          ),
+          ScrumBoardColumn(
+            header: 'Resolved',
+          ),
+          ScrumBoardColumn(
+            header: 'Done',
           ),
         ],
       ),

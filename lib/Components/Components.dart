@@ -1,1 +1,1 @@
-export "ScrumBoard/ScrumBoard.dart";
+export 'scrum_board/scrum_board.dart';

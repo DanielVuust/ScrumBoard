@@ -1,41 +1,36 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:scrumboard/models/scrum_board_work_item_dao.dart';
 
 part 'scrumboard_column_event.dart';
 part 'scrumboard_column_state.dart';
 
 class ScrumboardColumnBloc
-    extends Bloc<ScrumboardColumnAddEvent<int>, ScrumboardColumnState> {
-  final _colorChangedStateController = StreamController<List<int>>();
+    extends Bloc<ScrumboardColumnEvent, ScrumboardColumnState> {
+  final _columnItemsChangedController = StreamController<List<ScrumBoardWorkItemDAO>>();
 
-  StreamSink<List<int>> get _currentColor => _colorChangedStateController.sink;
+  StreamSink<List<ScrumBoardWorkItemDAO>> get _currentItems => _columnItemsChangedController.sink;
 
-  Stream<List<int>> get color => _colorChangedStateController.stream;
+  Stream<List<ScrumBoardWorkItemDAO>> get items => _columnItemsChangedController.stream;
 
   //Events.
-  final _eventStreamController = StreamController<ScrumboardColumnAddEvent>();
+  final _eventStreamController = StreamController<ScrumboardColumnEvent>();
 
-  StreamSink<ScrumboardColumnAddEvent> get eventSink =>
+  StreamSink<ScrumboardColumnEvent> get eventSink =>
       _eventStreamController.sink;
 
-  Stream<ScrumboardColumnAddEvent> get eventStream =>
+  Stream<ScrumboardColumnEvent> get eventStream =>
       _eventStreamController.stream;
 
-  ScrumboardColumnBloc(List<int> list)
-      : super(ScrumboardColumnInitial(list: list)) {
+  ScrumboardColumnBloc(List<ScrumBoardWorkItemDAO> workItems)
+      : super(ScrumboardColumnInitial(workItems)) {
+        _currentItems.add(state.workItems);
     _eventStreamController.stream.listen(_mapEventToState);
   }
 
   void _mapEventToState(ScrumboardColumnEvent event) {
-    if (event is ScrumboardColumnAddEvent) {
-      print("ScrumboardColumnAddEvent");
-      state.list.add(1);
-      print(state.list);
-    }
-    if (event is ScrumboardColumnRemoveEvent) {
-      print("ScrumboardColumnRemoveEvent");
-    }
+      event.execute(state.workItems);
+    _currentItems.add(state.workItems);
   }
 }

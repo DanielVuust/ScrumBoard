@@ -1,84 +1,80 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:scrumboard/bloc/scrumboard_column_bloc.dart';
+import 'package:scrumboard/models/scrum_board_column_dao.dart';
 
-import 'scrum_board_work_item.dart';
+import '../../models/scrum_board_work_item_dao.dart';
+import 'scrum_board_draggable_work_item.dart';
 
 class ScrumBoardColumn extends StatefulWidget {
-  final String header;
-  const ScrumBoardColumn({super.key, required this.header});
+  final ScrumBoardColumnDAO scrumBoardColumn;
+  const ScrumBoardColumn({super.key, required this.scrumBoardColumn});
 
   @override
   State<ScrumBoardColumn> createState() => _ScrumBoardColumnState();
 }
 
 class _ScrumBoardColumnState extends State<ScrumBoardColumn> {
-  final List<ScrumBoardWorkItem> list = List.generate(
-      2,
-      (index) => ScrumBoardWorkItem(
-            id: Random().nextInt(100),
-          ));
-  Color color = const Color.fromARGB(255, 213, 213, 213);
-
-  // final List<int> test2 = [2, 3, 4];
-  var bloc = ScrumboardColumnBloc([2, 3, 4]);
+  //Used to change background when hovering item over drag target.
+  Color backgroundColor = const Color.fromARGB(255, 213, 213, 213);
 
   @override
   Widget build(BuildContext context) {
+    var bloc = ScrumboardColumnBloc(widget.scrumBoardColumn.workItems);
     return Container(
-      padding: const EdgeInsets.all(8),
-      child: DragTarget<int>(
+      padding: const EdgeInsets.all(4),
+      child: DragTarget<ScrumBoardWorkItemDAO>(
         onWillAccept: (data) {
-          setState(() {
-            color = const Color.fromARGB(255, 182, 182, 182);
-          });
+          //Sets backgorund color a bit darker on hover.
+          backgroundColor = const Color.fromARGB(255, 182, 182, 182);
+          //Returns true to show drag target is valid.
           return true;
         },
         onAccept: (data) => {
-          bloc.eventSink.add(ScrumboardColumnAddEvent()),
-          print("Dragged to ${widget.header}"),
-          color = const Color.fromARGB(255, 213, 213, 213),
+          //Adds the current widget to the column bloc.
+          bloc.eventSink.add(ScrumboardColumnAddEvent(data)),
+          //Resets the color to default.
+          backgroundColor = const Color.fromARGB(255, 213, 213, 213),
         },
-        onLeave: (data) => setState(() {
-          color = const Color.fromARGB(255, 213, 213, 213);
-        }),
-        builder: (context, _, __) => Container(
-          padding: const EdgeInsets.all(8),
-          color: color,
-          width: 200,
-          child:
-              // StreamBuilder<List<int>>(
-              //   stream: bloc.color,
-              //   builder:
-              //       (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
-
-              // print(snapshot);
-              // if (snapshot.hasData) {
-              //   dynamic e = snapshot.data!.first.toString();
-              //   print(e);
-              //   print(e);
-              //   print("here " + e);
-
-              //   return Text(snapshot.data!.toString());
-              //   // return ScrumBoardWorkItem(
-              //   //   id: snapshot.data!.first,
-              //   // );
-              // }
-              // print("here32323");
-              // return const ScrumBoardWorkItem(
-              //   id: 0,
-              // );
-              // },
-
-              ListView.builder(
-            shrinkWrap: true,
-            itemCount: list.length,
-            itemBuilder: (context, index) {
-              return list[index];
-            },
-          ),
-        ),
+        onLeave: (data) =>
+            //Resets the color to default.
+            backgroundColor = const Color.fromARGB(255, 213, 213, 213),
+        builder: (context, _, __) => 
+            Container(
+              padding: const EdgeInsets.all(8),
+              color: backgroundColor,
+              width: 200,
+              height: 1100,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(widget.scrumBoardColumn.heading, textAlign: TextAlign.start, textScaleFactor: 2,),
+                   Expanded(
+                    child: StreamBuilder<List<ScrumBoardWorkItemDAO>>(
+                      stream: bloc.items,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<ScrumBoardWorkItemDAO>> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.connectionState == ConnectionState.done) {
+                          return const Text('done');
+                        } else if (snapshot.hasError) {
+                          return const Text('Error!');
+                        } else {
+                          return ListView.builder(
+                            itemBuilder: (context, index) {
+                              return ScrumBoardDragableWorkItem(
+                                  workItem: snapshot.data![index], bloc: bloc);
+                            },
+                            itemCount: snapshot.data!.length,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
       ),
     );
   }

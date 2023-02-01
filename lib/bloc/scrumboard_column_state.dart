@@ -1,12 +1,11 @@
 part of 'scrumboard_column_bloc.dart';
 
-@immutable
 abstract class ScrumboardColumnState {
-  List<int> list;
-  ScrumboardColumnState({required this.list}) {}
+  final List<ScrumBoardWorkItemDAO> workItems;
+  ScrumboardColumnState(this.workItems);
 }
 
-@immutable
 class ScrumboardColumnInitial extends ScrumboardColumnState {
-  ScrumboardColumnInitial({required super.list});
+  ScrumboardColumnInitial(List<ScrumBoardWorkItemDAO> workItems)
+      : super(workItems);
 }

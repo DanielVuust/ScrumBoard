@@ -1,0 +1,5 @@
+public class ScrumboardColumn{
+    int id;
+    String header;
+    List<int> workitems;
+}

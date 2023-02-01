@@ -10,13 +10,14 @@ class ScrumBoardWorkItem extends StatelessWidget {
   Widget build(BuildContext context) {
     //TODO Remove description.
     String description = "Description for workitem ${id}";
+
     return Draggable<int>(
       onDragCompleted: () => {print("Dragged item $id")},
       data: id,
       feedback: Card(
-        // decoration: BoxDecoration(color: Colors.yellow),
-        surfaceTintColor: Colors.blue,
         child: SizedBox(
+          height: 100,
+          width: 200,
           child: Text(
             id.toString(),
             textAlign: TextAlign.left,
@@ -26,10 +27,8 @@ class ScrumBoardWorkItem extends StatelessWidget {
       ),
       childWhenDragging: null,
       child: Card(
-        // decoration: BoxDecoration(color: Colors.yellow),
-        surfaceTintColor: Colors.blue,
         child: SizedBox(
-          height: 200,
+          height: 100,
           width: 200,
           child: Text(id.toString()),
         ),

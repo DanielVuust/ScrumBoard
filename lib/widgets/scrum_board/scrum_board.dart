@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scrumboard/Components/scrum_board/scrum_board_column.dart';
-import 'package:scrumboard/main.dart';
+import 'package:scrumboard/widgets/scrum_board/scrum_board_column.dart';
 
 class ScrumBoard extends StatelessWidget {
   const ScrumBoard({super.key});

@@ -1,7 +1,7 @@
-class UserDAO {
+class UserDTO {
   final String firstname;
   final String lastname;
   final String nameAbbreviation;
 
-  UserDAO(this.firstname, this.lastname, this.nameAbbreviation);
+  UserDTO(this.firstname, this.lastname, this.nameAbbreviation);
 }

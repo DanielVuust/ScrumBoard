@@ -35,3 +35,27 @@ class ScrumBoardColumnAddNewEvent extends ScrumBoardColumnEvent {
     workItems.add(workItem);
   }
 }
+
+class ScrumBoardColumnReorderItemEvent extends ScrumBoardColumnEvent {
+  final int indexToReplace;
+  const ScrumBoardColumnReorderItemEvent(
+      ScrumBoardWorkItemDTO workItem, this.indexToReplace)
+      : super(workItem);
+
+  @override
+  execute(List<ScrumBoardWorkItemDTO> workItems) {
+    late int currentIndexToReplace = indexToReplace;
+    incrementIndexByOne(workItems, indexToReplace);
+    workItem.index = indexToReplace;
+    workItems.add(workItem);
+  }
+
+  incrementIndexByOne(List<ScrumBoardWorkItemDTO> workItems, int currentIndexToReplace) {
+    while (workItems.any((x) => x.index == currentIndexToReplace)) {
+      final workItemToReplace =
+          workItems.singleWhere((x) => x.index == currentIndexToReplace);
+      incrementIndexByOne(workItems, currentIndexToReplace + 1);
+      workItemToReplace.index++;
+    }
+  }
+}

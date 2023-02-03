@@ -11,25 +11,26 @@ class ScrumBoard extends StatefulWidget {
 }
 
 class _ScrumBoardState extends State<ScrumBoard> {
-  // ignore: todo
-  //TODO Get values from db, This is placeholder values.
-  final ScrumBoardColumnDTO dao = ScrumBoardColumnDTO(
-      1, [ScrumBoardWorkItemDTO(1, "test1", "desc1")], "test1");
-  final ScrumBoardColumnDTO dao2 = ScrumBoardColumnDTO(
-      2, [ScrumBoardWorkItemDTO(2, "test2", "desc2")], "test2");
-  final ScrumBoardColumnDTO dao3 = ScrumBoardColumnDTO(
+  List<ScrumBoardColumnDTO> l = [
+    ScrumBoardColumnDTO(
+        1, [ScrumBoardWorkItemDTO(1, "test1", "desc1", null, 5)], "test1"),
+        ScrumBoardColumnDTO(
       3,
       [
-        ScrumBoardWorkItemDTO(3, "test3", "desc3"),
-        ScrumBoardWorkItemDTO(5, "test5", "desc5"),
-        ScrumBoardWorkItemDTO(6, "test6", "desc6"),
-        ScrumBoardWorkItemDTO(7, "test7", "desc7"),
-        ScrumBoardWorkItemDTO(8, "test8", "desc8"),
-        ScrumBoardWorkItemDTO(9, "test9", "desc9")
+        ScrumBoardWorkItemDTO(4, "test3", "desc3", null, 1),
+        ScrumBoardWorkItemDTO(5, "test5", "desc5", null, 3),
+        ScrumBoardWorkItemDTO(7, "test7", "desc7", null, 4),
+        ScrumBoardWorkItemDTO(6, "test6", "desc6", null, 4),
+        ScrumBoardWorkItemDTO(8, "test8", "desc8", null, 6),
+        ScrumBoardWorkItemDTO(9, "test9", "desc9", null, 7)
       ],
-      "test3");
-  final ScrumBoardColumnDTO dao4 = ScrumBoardColumnDTO(
-      4, [ScrumBoardWorkItemDTO(4, "test4", "desc4")], "test4");
+      "test3"),
+      ScrumBoardColumnDTO(
+      2, [ScrumBoardWorkItemDTO(2, "test2", "desc2", null, 5)], "test2"),
+      ScrumBoardColumnDTO(
+      4, [ScrumBoardWorkItemDTO(4, "test4", "desc4", null, 5)], "test4")
+  ];
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -37,23 +38,18 @@ class _ScrumBoardState extends State<ScrumBoard> {
       appBar: AppBar(
         title: const Text("Scrum Board"),
       ),
-      body: ListView(
+      body: ReorderableListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.all(8),
-        children: [
-          ScrumBoardColumn(
-            scrumBoardColumn: dao,
-          ),
-          ScrumBoardColumn(
-            scrumBoardColumn: dao2,
-          ),
-          ScrumBoardColumn(
-            scrumBoardColumn: dao3,
-          ),
-          ScrumBoardColumn(
-            scrumBoardColumn: dao4,
-          ),
-        ],
+        itemBuilder: (BuildContext context, int index) {
+          
+          return ScrumBoardColumn(
+            scrumBoardColumn: l[index],
+            key: Key(l[index].id.toString()),
+          );
+        },
+        itemCount: l.length,
+        onReorder: (int oldIndex, int newIndex) {},
       ),
     );
   }

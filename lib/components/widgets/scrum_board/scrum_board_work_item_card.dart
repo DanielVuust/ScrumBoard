@@ -27,7 +27,7 @@ class ScrumBoardWorkItemCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 12, 0, 0),
             child: Text(
-              workItem.name,
+              workItem.index.toString(),
               textScaleFactor: 1.5,
             ),
           ),

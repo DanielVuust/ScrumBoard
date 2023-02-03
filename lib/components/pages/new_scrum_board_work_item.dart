@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:scrumboard/components/widgets/scrum_board/scrum_board_work_item_edit_form.dart';
 
 class NewScrumBoardWorkItem extends StatelessWidget {

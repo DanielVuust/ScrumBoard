@@ -2,8 +2,9 @@ import 'package:scrumboard/models/scrum_board_work_item_dto.dart';
 
 class ScrumBoardColumnDTO {
   final int id;
-  final List<ScrumBoardWorkItemDTO> workItems;
+  late final List<ScrumBoardWorkItemDTO> workItems;
   final String heading;
+  final int index;
 
-  ScrumBoardColumnDTO(this.id, this.workItems, this.heading);
+  ScrumBoardColumnDTO(this.id, this.workItems, this.heading, [this.index = 0]);
 }

@@ -5,7 +5,8 @@ class ScrumBoardWorkItemDTO {
   String name;
   String description;
   UserDTO? responsibleUser;
+  int index;
 
   ScrumBoardWorkItemDTO(this.id, this.name, this.description,
-      [this.responsibleUser]);
+      [this.responsibleUser, this.index = 0]);
 }

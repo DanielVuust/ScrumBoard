@@ -1,0 +1,6 @@
+class: ScrumBoardColumn
+table: scrum_board_column
+fields: 
+  workItems: List<ScrumBoardWorkItem>
+  heading: String
+  boardIndex: int

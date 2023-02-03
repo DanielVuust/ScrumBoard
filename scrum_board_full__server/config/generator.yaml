@@ -1,0 +1,3 @@
+type: server
+
+client_package_path: ../scrum_board_full__client

@@ -36,7 +36,7 @@ jobs:
           aws-region: us-west-2
 
       - name: Create passwords file
-        working-directory: scrum_board_full__server
+        working-directory: scrumboard_server
         shell: bash
         env:
           SERVERPOD_PASSWORDS: ${{ secrets.SERVERPOD_PASSWORDS }}
@@ -46,19 +46,19 @@ jobs:
           ls config/
 
       - name: Get Dart packages
-        working-directory: scrum_board_full__server
+        working-directory: scrumboard_server
         run: dart pub get
 
       - name: Compile server
-        working-directory: scrum_board_full__server
+        working-directory: scrumboard_server
         run: dart compile kernel bin/main.dart
 
       - name: Create CodeDeploy Deployment
         id: deploy
         env:
-          PROJECT_NAME: scrum_board_full_
-          AWS_NAME: scrum-board-full-
-          DEPLOYMENT_BUCKET: scrum-board-full--deployment-384924
+          PROJECT_NAME: scrumboard
+          AWS_NAME: scrumboard
+          DEPLOYMENT_BUCKET: scrumboard-deployment-4295021
           TARGET: ${{ github.event.inputs.target }}
         run: |
           # Deploy server to AWS

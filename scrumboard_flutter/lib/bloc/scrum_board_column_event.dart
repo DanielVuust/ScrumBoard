@@ -2,36 +2,36 @@ part of 'scrum_board_column_bloc.dart';
 
 abstract class ScrumBoardColumnEvent {
   const ScrumBoardColumnEvent(this.workItem);
-  final ScrumBoardWorkItemDTO workItem;
+  final ScrumBoardWorkItem workItem;
 
-  execute(List<ScrumBoardWorkItemDTO> workItems);
+  execute(List<ScrumBoardWorkItem> workItems);
 }
 
 class ScrumBoardColumnAddEvent extends ScrumBoardColumnEvent {
-  const ScrumBoardColumnAddEvent(ScrumBoardWorkItemDTO workItem)
+  const ScrumBoardColumnAddEvent(ScrumBoardWorkItem workItem)
       : super(workItem);
 
   @override
-  execute(List<ScrumBoardWorkItemDTO> workItems) {
+  execute(List<ScrumBoardWorkItem> workItems) {
     workItems.add(workItem);
   }
 }
 
 class ScrumBoardColumnRemoveEvent extends ScrumBoardColumnEvent {
-  const ScrumBoardColumnRemoveEvent(ScrumBoardWorkItemDTO workItem)
+  const ScrumBoardColumnRemoveEvent(ScrumBoardWorkItem workItem)
       : super(workItem);
   @override
-  execute(List<ScrumBoardWorkItemDTO> workItems) {
+  execute(List<ScrumBoardWorkItem> workItems) {
     workItems.remove(workItem);
   }
 }
 
 class ScrumBoardColumnAddNewEvent extends ScrumBoardColumnEvent {
-  const ScrumBoardColumnAddNewEvent(ScrumBoardWorkItemDTO workItem)
+  const ScrumBoardColumnAddNewEvent(ScrumBoardWorkItem workItem)
       : super(workItem);
 
   @override
-  execute(List<ScrumBoardWorkItemDTO> workItems) {
+  execute(List<ScrumBoardWorkItem> workItems) {
     workItems.add(workItem);
   }
 }
@@ -39,27 +39,15 @@ class ScrumBoardColumnAddNewEvent extends ScrumBoardColumnEvent {
 class ScrumBoardColumnReorderItemEvent extends ScrumBoardColumnEvent {
   final int indexToReplace;
   const ScrumBoardColumnReorderItemEvent(
-      ScrumBoardWorkItemDTO workItem, this.indexToReplace)
+      ScrumBoardWorkItem workItem, this.indexToReplace)
       : super(workItem);
 
   @override
-  execute(List<ScrumBoardWorkItemDTO> workItems) {
+  execute(List<ScrumBoardWorkItem> workItems) {
     late int currentIndexToReplace = indexToReplace;
-    incrementIndexByOne(workItems, indexToReplace);
-    workItem.index = indexToReplace;
+    workItem.columnIndex = indexToReplace;
     workItems.add(workItem);
   }
 
-  incrementIndexByOne(
-      List<ScrumBoardWorkItemDTO> workItems, int currentIndexToReplace) {
-    if (workItems.any((x) => x.index == currentIndexToReplace)) {
-      var workItemToReplace =
-          workItems.firstWhere((x) => x.index == currentIndexToReplace);
-      if (workItemToReplace == null) {
-        return;
-      }
-      incrementIndexByOne(workItems, currentIndexToReplace + 1);
-      workItemToReplace.index++;
-    }
-  } 
+  
 }

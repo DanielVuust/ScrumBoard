@@ -1,0 +1,8 @@
+class: ScrumBoardWorkItem
+table: scrum_board_work_items
+fields:
+  name: String
+  scurmBoardColumnId: int?, parent=scrum_board_column
+  description: String
+  responsibleUser: User?
+  columnIndex: int?

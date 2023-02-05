@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:scrumboard_client/scrumboard_client.dart';
 
-import '../../../bloc/scrum_board_column_bloc.dart';
-import '../../../models/scrum_board_work_item_dto.dart';
+import '../../../bloc/scrum_board_bloc.dart';
 
 class ScrumBoardWorkItemCardWidget extends StatelessWidget {
-  final ScrumBoardWorkItemDTO workItem;
-  final ScrumboardColumnBloc bloc;
+  final ScrumBoardWorkItem workItem;
+  final ScrumBoardBloc bloc;
   const ScrumBoardWorkItemCardWidget(
       {super.key, required this.workItem, required this.bloc});
 
@@ -27,7 +27,7 @@ class ScrumBoardWorkItemCardWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 12, 0, 0),
             child: Text(
-              workItem.id.toString(),
+              workItem.name.toString(),
               textScaleFactor: 1.5,
             ),
           ),
@@ -41,7 +41,15 @@ class ScrumBoardWorkItemCardWidget extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(workItem.description),
+            child: Text("Index:${workItem.columnIndex}"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Id:${workItem.id}"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(workItem.description.toString()),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -71,7 +79,7 @@ class ScrumBoardWorkItemCardWidget extends StatelessWidget {
                   IconButton(
                       onPressed: () {
                         bloc.eventSink
-                            .add(ScrumBoardColumnRemoveEvent(workItem));
+                            .add(ScrumBoardDeleteWorkItemEvent(workItem.id!));
                       },
                       icon: const Icon(Icons.delete),
                       color: const Color(0xFF000A1F))

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:scrumboard_client/scrumboard_client.dart';
 
-import '../../../bloc/scrum_board_column_bloc.dart';
-import '../../../models/scrum_board_work_item_dto.dart';
+import '../../../bloc/scrum_board_bloc.dart';
+import '../../../logging.dart';
 import 'scrum_board_work_item_card.dart';
 
 class ScrumBoardDragableWorkItemWidget extends StatefulWidget {
-  final ScrumBoardWorkItemDTO workItem;
-  final ScrumboardColumnBloc bloc;
+  final ScrumBoardWorkItem workItem;
+  final ScrumBoardBloc bloc;
   const ScrumBoardDragableWorkItemWidget(
       {super.key, required this.workItem, required this.bloc});
 
@@ -18,6 +19,9 @@ class ScrumBoardDragableWorkItemWidget extends StatefulWidget {
 class _ScrumBoardDragableWorkItemWidgetState
     extends State<ScrumBoardDragableWorkItemWidget> {
   late double padding = 0;
+  final log = logger(_ScrumBoardDragableWorkItemWidgetState);
+
+
   @override
   Widget build(BuildContext context) {
     return
@@ -28,10 +32,10 @@ class _ScrumBoardDragableWorkItemWidgetState
         Container(
           margin: EdgeInsets.only(top: padding),
           // padding: EdgeInsets.only(top: widget.padding),
-          child: Draggable<ScrumBoardWorkItemDTO>(
+          child: Draggable<ScrumBoardWorkItem>(
             onDragCompleted: () => {
-              widget.bloc.eventSink
-                  .add(ScrumBoardColumnRemoveEvent(widget.workItem))
+              // widget.bloc.eventSink
+              //     .add(ScrumBoardColumnRemoveEvent(widget.workItem))
             },
             data: widget.workItem,
             feedback: SizedBox(
@@ -57,11 +61,11 @@ class _ScrumBoardDragableWorkItemWidgetState
             ),
           ),
         ),
-        DragTarget<ScrumBoardWorkItemDTO>(
+        DragTarget<ScrumBoardWorkItem>(
           onAccept: (data) => {
             //Adds the current widget to the column bloc.
             widget.bloc.eventSink.add(
-                ScrumBoardColumnReorderItemEvent(data, widget.workItem.index)),
+                ScrumBoardMoveWorkItemEvent(data.id!, widget.workItem.scurmBoardColumnId!, widget.workItem.columnIndex!)),
 
             setState(() {
               padding = 0;

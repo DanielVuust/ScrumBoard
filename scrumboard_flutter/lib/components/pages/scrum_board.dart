@@ -2,63 +2,113 @@ import 'package:flutter/material.dart';
 import 'package:scrumboard_client/scrumboard_client.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 
-import '../../models/scrum_board_column_dto.dart';
-import '../../models/scrum_board_work_item_dto.dart';
+import '../../bloc/scrum_board_bloc.dart';
+import '../../logging.dart';
 import '../widgets/scrum_board/scrum_board_column.dart';
+import 'edit_scrum_board_column.dart';
 
-class ScrumBoard extends StatefulWidget {
-  const ScrumBoard({super.key});
+class ScrumBoardPage extends StatefulWidget {
+  final int scrumBoardId;
+  const ScrumBoardPage({super.key, required this.scrumBoardId});
 
   @override
-  State<ScrumBoard> createState() => _ScrumBoardState();
+  State<ScrumBoardPage> createState() => _ScrumBoardPageState();
 }
 
-class _ScrumBoardState extends State<ScrumBoard> {
+class _ScrumBoardPageState extends State<ScrumBoardPage> {
   var client = Client('http://localhost:8080/')
     ..connectivityMonitor = FlutterConnectivityMonitor();
 
-  List<ScrumBoardColumnDTO> l = [
-    ScrumBoardColumnDTO(
-        1, [ScrumBoardWorkItemDTO(1, "test1", "desc1", null, 5)], "test1"),
-    ScrumBoardColumnDTO(
-        3,
-        [
-          ScrumBoardWorkItemDTO(4, "test3", "desc3", null, 1),
-          ScrumBoardWorkItemDTO(5, "test5", "desc5", null, 3),
-          ScrumBoardWorkItemDTO(7, "test7", "desc7", null, 4),
-          ScrumBoardWorkItemDTO(6, "test6", "desc6", null, 4),
-          ScrumBoardWorkItemDTO(8, "test8", "desc8", null, 6),
-          ScrumBoardWorkItemDTO(9, "test9", "desc9", null, 7)
-        ],
-        "test3"),
-    ScrumBoardColumnDTO(
-        2, [ScrumBoardWorkItemDTO(2, "test2", "desc2", null, 5)], "test2"),
-    ScrumBoardColumnDTO(
-        4, [ScrumBoardWorkItemDTO(4, "test4", "desc4", null, 5)], "test4")
-  ];
+  var scrumBoardBloc = ScrumBoardBloc();
 
+  _ScrumBoardPageState() {
+    scrumBoardBloc.eventSink
+        .add(ScrumBoardGetInisialValueEvent(1));
+  }
+
+  final log = logger(ScrumBoardPage);
   @override
   Widget build(BuildContext context) {
+    log.d("Building Scrum Board");
     return Scaffold(
       appBar: AppBar(
         title: const Text("Scrum Board"),
       ),
-      body: ReorderableListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.all(8),
-        itemBuilder: (BuildContext context, int index) {
-          return ScrumBoardColumnWidget(
-            scrumBoardColumn: l[index],
-            key: Key(l[index].id.toString()),
-          );
+      body: StreamBuilder<ScrumBoard>(
+        stream: scrumBoardBloc.scrumBoard,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SizedBox(
+              height: 200,
+              width: 100,
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return const Text('done');
+          } else if (snapshot.hasError) {
+            return const Text('Error!');
+          } else if (snapshot.data == null ||
+              snapshot.data?.scrumBoardColumns == null) {
+            return const Text('no Data');
+          } else {
+
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              key: Key(snapshot.data!.id.toString()),
+              itemBuilder: (context, index) {
+                return ScrumBoardColumnWidget(
+                  scrumBoardColumn: snapshot.data!.scrumBoardColumns![index],
+                  bloc: scrumBoardBloc,
+                );
+              },
+              itemCount: snapshot.data!.scrumBoardColumns!.length,
+            );
+          }
         },
-        itemCount: l.length,
-        onReorder: (int oldIndex, int newIndex) {},
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
+      // body: ReorderableListView.builder(
+      //   scrollDirection: Axis.horizontal,
+      //   padding: const EdgeInsets.all(8),
+      //   itemBuilder: (BuildContext context, int index) {
+      //     return ScrumBoardColumnWidget(
+      //       scrumBoardColumn: l[index],
+      //       key: Key(l[index].id.toString()),
+      //     );
+      //   },
+      //   itemCount: l.length,
+      //   onReorder: (int oldIndex, int newIndex) {},
+      // ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: "btn2",
+            onPressed: () async {
+              log.d(await client.scrumBoard.addMockData());
+            },
+            child: const Text("Add mock data"),
+          ),
+          FloatingActionButton(
+            heroTag: "btn1",
+            onPressed: () async {
+              _awaitReturnFromColumnEditForm(context);
+            },
+            child: const Icon(Icons.add),
+          ),
+        ],
       ),
     );
+  }
+
+  void _awaitReturnFromColumnEditForm(BuildContext context) async {
+    final ScrumBoardColumn column = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            EditScrumBoardColumnScreen(column: ScrumBoardColumn(heading: "")),
+      ),
+    );
+    column.scrumBoardId = 1;
+    scrumBoardBloc.eventSink.add(ScrumBoardAddColumnEvent(column));
   }
 }

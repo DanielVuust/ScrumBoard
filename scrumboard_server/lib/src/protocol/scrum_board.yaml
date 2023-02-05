@@ -1,0 +1,5 @@
+class: ScrumBoard
+table: scrum_board
+fields: 
+  boardNickname: String?
+  scrumBoardColumns: List<ScrumBoardColumn>?, api

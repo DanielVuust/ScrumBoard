@@ -1,0 +1,7 @@
+class: ScrumBoardColumn
+table: scrum_board_column
+fields: 
+  heading: String
+  boardIndex: int?
+  scrumBoardId: int?, parent=scrum_board
+  scrumboardColumnWorkItems: List<ScrumBoardWorkItem>?, api

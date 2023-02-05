@@ -8,8 +8,16 @@
 library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixes
 
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import 'example.dart' as _i2;
-export 'example.dart';
+import 'scrum_board.dart' as _i2;
+import 'scrum_board_column.dart' as _i3;
+import 'scrum_board_work_item.dart' as _i4;
+import 'user.dart' as _i5;
+import 'protocol.dart' as _i6;
+import 'package:scrumboard_client/src/protocol/scrum_board_column.dart' as _i7;
+export 'scrum_board.dart';
+export 'scrum_board_column.dart';
+export 'scrum_board_work_item.dart';
+export 'user.dart';
 export 'client.dart'; // ignore_for_file: equal_keys_in_map
 
 class Protocol extends _i1.SerializationManager {
@@ -30,27 +38,84 @@ class Protocol extends _i1.SerializationManager {
     if (customConstructors.containsKey(t)) {
       return customConstructors[t]!(data, this) as T;
     }
-    if (t == _i2.Example) {
-      return _i2.Example.fromJson(data, this) as T;
+    if (t == _i2.ScrumBoard) {
+      return _i2.ScrumBoard.fromJson(data, this) as T;
     }
-    if (t == _i1.getType<_i2.Example?>()) {
-      return (data != null ? _i2.Example.fromJson(data, this) : null) as T;
+    if (t == _i3.ScrumBoardColumn) {
+      return _i3.ScrumBoardColumn.fromJson(data, this) as T;
+    }
+    if (t == _i4.ScrumBoardWorkItem) {
+      return _i4.ScrumBoardWorkItem.fromJson(data, this) as T;
+    }
+    if (t == _i5.User) {
+      return _i5.User.fromJson(data, this) as T;
+    }
+    if (t == _i1.getType<_i2.ScrumBoard?>()) {
+      return (data != null ? _i2.ScrumBoard.fromJson(data, this) : null) as T;
+    }
+    if (t == _i1.getType<_i3.ScrumBoardColumn?>()) {
+      return (data != null ? _i3.ScrumBoardColumn.fromJson(data, this) : null)
+          as T;
+    }
+    if (t == _i1.getType<_i4.ScrumBoardWorkItem?>()) {
+      return (data != null ? _i4.ScrumBoardWorkItem.fromJson(data, this) : null)
+          as T;
+    }
+    if (t == _i1.getType<_i5.User?>()) {
+      return (data != null ? _i5.User.fromJson(data, this) : null) as T;
+    }
+    if (t == _i1.getType<List<_i6.ScrumBoardColumn>?>()) {
+      return (data != null
+          ? (data as List)
+              .map((e) => deserialize<_i6.ScrumBoardColumn>(e))
+              .toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i6.ScrumBoardWorkItem>?>()) {
+      return (data != null
+          ? (data as List)
+              .map((e) => deserialize<_i6.ScrumBoardWorkItem>(e))
+              .toList()
+          : null) as dynamic;
+    }
+    if (t == List<_i7.ScrumBoardColumn>) {
+      return (data as List)
+          .map((e) => deserialize<_i7.ScrumBoardColumn>(e))
+          .toList() as dynamic;
     }
     return super.deserialize<T>(data, t);
   }
 
   @override
   String? getClassNameForObject(Object data) {
-    if (data is _i2.Example) {
-      return 'Example';
+    if (data is _i2.ScrumBoard) {
+      return 'ScrumBoard';
+    }
+    if (data is _i3.ScrumBoardColumn) {
+      return 'ScrumBoardColumn';
+    }
+    if (data is _i4.ScrumBoardWorkItem) {
+      return 'ScrumBoardWorkItem';
+    }
+    if (data is _i5.User) {
+      return 'User';
     }
     return super.getClassNameForObject(data);
   }
 
   @override
   dynamic deserializeByClassName(Map<String, dynamic> data) {
-    if (data['className'] == 'Example') {
-      return deserialize<_i2.Example>(data['data']);
+    if (data['className'] == 'ScrumBoard') {
+      return deserialize<_i2.ScrumBoard>(data['data']);
+    }
+    if (data['className'] == 'ScrumBoardColumn') {
+      return deserialize<_i3.ScrumBoardColumn>(data['data']);
+    }
+    if (data['className'] == 'ScrumBoardWorkItem') {
+      return deserialize<_i4.ScrumBoardWorkItem>(data['data']);
+    }
+    if (data['className'] == 'User') {
+      return deserialize<_i5.User>(data['data']);
     }
     return super.deserializeByClassName(data);
   }

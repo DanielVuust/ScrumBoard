@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:scrumboard_client/scrumboard_client.dart';
 
-import '../../../bloc/scrum_board_column_bloc.dart';
-import '../../../models/scrum_board_column_dto.dart';
-import '../../../models/scrum_board_work_item_dto.dart';
+import '../../../bloc/scrum_board_bloc.dart';
 import '../../pages/new_scrum_board_work_item.dart';
 import 'scrum_board_draggable_work_item.dart';
 
 class ScrumBoardColumnWidget extends StatefulWidget {
-  final ScrumBoardColumnDTO scrumBoardColumn;
-  const ScrumBoardColumnWidget({super.key, required this.scrumBoardColumn});
+  final ScrumBoardColumn scrumBoardColumn;
+  final ScrumBoardBloc bloc;
+  const ScrumBoardColumnWidget(
+      {super.key, required this.scrumBoardColumn, required this.bloc});
 
   @override
-  State<ScrumBoardColumnWidget> createState() =>
-      _ScrumBoardColumnWidgetState(scrumBoardColumn);
+  State<ScrumBoardColumnWidget> createState() => _ScrumBoardColumnWidgetState();
 }
 
 class _ScrumBoardColumnWidgetState extends State<ScrumBoardColumnWidget> {
   //Used to change background when hovering item over drag target.
   Color backgroundColor = const Color.fromARGB(255, 213, 213, 213);
 
-  late ScrumBoardColumnDTO scrumBoardColumnDTO;
-  _ScrumBoardColumnWidgetState(this.scrumBoardColumnDTO) {
-    bloc = ScrumboardColumnBloc(scrumBoardColumnDTO);
-  }
-  late ScrumboardColumnBloc bloc;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,6 +27,7 @@ class _ScrumBoardColumnWidgetState extends State<ScrumBoardColumnWidget> {
         padding: const EdgeInsets.all(8),
         color: backgroundColor,
         width: 200,
+        height: 1100,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -64,38 +60,50 @@ class _ScrumBoardColumnWidgetState extends State<ScrumBoardColumnWidget> {
               ],
             ),
             Expanded(
-              child: StreamBuilder<ScrumBoardColumnDTO>(
-                stream: bloc.items,
-                builder: (BuildContext context,
-                    AsyncSnapshot<ScrumBoardColumnDTO> snapshot) {
-                  scrumBoardColumnDTO.workItems.sort(
-                      (ScrumBoardWorkItemDTO a, ScrumBoardWorkItemDTO b) =>
-                          a.index.compareTo(b.index) as int Function(dynamic a, dynamic b)?);
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SizedBox(
-                      height: 200,
-                      width: 100,
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    return const Text('done');
-                  } else if (snapshot.hasError) {
-                    return const Text('Error!');
-                  } else {
-                    return ListView.builder(
-                      key: Key(snapshot.data!.id.toString()),
-                      itemBuilder: (context, index) {
-                        return ScrumBoardDragableWorkItemWidget(
-                            key: Key(
-                                snapshot.data!.workItems[index].id.toString()),
-                            workItem: snapshot.data!.workItems[index],
-                            bloc: bloc);
-                      },
-                      itemCount: snapshot.data!.workItems.length,
-                    );
-                  }
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return ScrumBoardDragableWorkItemWidget(
+                      workItem: widget
+                          .scrumBoardColumn.scrumboardColumnWorkItems![index],
+                      bloc: widget.bloc);
                 },
+                itemCount:
+                    widget.scrumBoardColumn.scrumboardColumnWorkItems?.length ??
+                        0,
               ),
+              // child: StreamBuilder<ScrumBoard>(
+              //   stream: widget.bloc.state-,
+              //   builder:
+              //       (BuildContext context, AsyncSnapshot<ScrumBoard> snapshot) {
+              //     scrumBoardColumn.scrumboardColumnWorkItems;
+              //     if (snapshot.connectionState == ConnectionState.waiting) {
+              //       return const SizedBox(
+              //         height: 200,
+              //         width: 100,
+              //         child: CircularProgressIndicator(),
+              //       );
+              //     } else if (snapshot.connectionState == ConnectionState.done) {
+              //       return const Text('done');
+              //     } else if (snapshot.hasError) {
+              //       return const Text('Error!');
+              //     } else {
+              //       return ListView.builder(
+              //         key: Key(snapshot.data!.id.toString()),
+              //         itemBuilder: (context, index) {
+              //           return ScrumBoardDragableWorkItemWidget(
+              //               key: Key(snapshot
+              //                   .data!.scrumboardColumnWorkItems![index].id
+              //                   .toString()),
+              //               workItem: snapshot
+              //                   .data!.scrumboardColumnWorkItems![index],
+              //               bloc: bloc);
+              //         },
+              //         itemCount:
+              //             snapshot.data!.scrumboardColumnWorkItems!.length,
+              //       );
+              //     }
+              //   },
+              // ),
             ),
           ],
         ),
@@ -104,12 +112,13 @@ class _ScrumBoardColumnWidgetState extends State<ScrumBoardColumnWidget> {
   }
 
   void _awaitReturnFromWorkItemEditForm(BuildContext context) async {
-    final ScrumBoardWorkItemDTO result = await Navigator.push(
+    final ScrumBoardWorkItem workItem = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => const NewScrumBoardWorkItem(),
       ),
     );
-    bloc.eventSink.add(ScrumBoardColumnAddEvent(result));
+    workItem.scurmBoardColumnId = widget.scrumBoardColumn.id;
+    widget.bloc.eventSink.add(ScrumBoardAddWorkItemEvent(workItem));
   }
 }

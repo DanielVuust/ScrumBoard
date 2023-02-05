@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:scrumboard_client/scrumboard_client.dart';
 
-//This widget is statefull as it need to keep track of the current work item.
-class ScrumBoardWorkItemEditFormWidget extends StatefulWidget {
-  const ScrumBoardWorkItemEditFormWidget({super.key});
+class ScrumBoardColumnEditFormWidget extends StatefulWidget {
+  final ScrumBoardColumn column;
+  const ScrumBoardColumnEditFormWidget({super.key, required this.column});
 
   @override
-  State<ScrumBoardWorkItemEditFormWidget> createState() =>
-      _ScrumBoardWorkItemEditFormWidgetState();
+  State<ScrumBoardColumnEditFormWidget> createState() =>
+      _ScrumBoardColumnEditFormWidgetState();
 }
 
-class _ScrumBoardWorkItemEditFormWidgetState
-    extends State<ScrumBoardWorkItemEditFormWidget> {
-  ScrumBoardWorkItem workItem =
-      ScrumBoardWorkItem(columnIndex: 22, description: '', name: '');
-  final _formKey = GlobalKey<FormState>();
+class _ScrumBoardColumnEditFormWidgetState
+    extends State<ScrumBoardColumnEditFormWidget> {
+    final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,33 +33,21 @@ class _ScrumBoardWorkItemEditFormWidgetState
             child: Column(
               children: [
                 TextFormField(
-                  initialValue: workItem.name,
+                  initialValue: widget.column.heading,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.person),
-                    hintText: 'Name for new work item',
-                    labelText: 'Name *',
+                    hintText: 'Column header',
+                    labelText: 'Heading *',
                   ),
                   validator: (String? value) {
-                    workItem.name = value ?? "";
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  initialValue: workItem.description,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.person),
-                    hintText: 'Description for new work item',
-                    labelText: 'Description *',
-                  ),
-                  validator: (String? value) {
-                    workItem.description = value ?? "";
+                    widget.column.heading = value ?? "";
                     return null;
                   },
                 ),
                 ElevatedButton(
                     onPressed: (() {
                       if (_formKey.currentState?.validate() ?? false) {
-                        Navigator.pop(context, workItem);
+                        Navigator.pop(context, widget.column);
                       }
                     }),
                     child: Container(

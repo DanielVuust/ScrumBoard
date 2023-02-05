@@ -1,21 +1,19 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-
-import '../models/scrum_board_column_dto.dart';
-import '../models/scrum_board_work_item_dto.dart';
+import 'package:scrumboard_client/scrumboard_client.dart';
 
 part 'scrum_board_column_event.dart';
 part 'scrum_board_column_state.dart';
 
 class ScrumboardColumnBloc
     extends Bloc<ScrumBoardColumnEvent, ScrumBoardColumnState> {
-  final _columnItemsChangedController = StreamController<ScrumBoardColumnDTO>();
+  final _columnItemsChangedController = StreamController<ScrumBoardColumn>();
 
-  StreamSink<ScrumBoardColumnDTO> get _currentItems =>
+  StreamSink<ScrumBoardColumn> get _currentItems =>
       _columnItemsChangedController.sink;
 
-  Stream<ScrumBoardColumnDTO> get items => _columnItemsChangedController.stream;
+  Stream<ScrumBoardColumn> get items => _columnItemsChangedController.stream;
 
   //Events.
   final _eventStreamController = StreamController<ScrumBoardColumnEvent>();
@@ -26,7 +24,7 @@ class ScrumboardColumnBloc
   Stream<ScrumBoardColumnEvent> get eventStream =>
       _eventStreamController.stream;
 
-  ScrumboardColumnBloc(ScrumBoardColumnDTO column)
+  ScrumboardColumnBloc(ScrumBoardColumn column)
       : super(ScrumBoardColumnInitial(column)) {
     _eventStreamController.stream.listen(_mapEventToState);
     _currentItems.add(state.column);
@@ -34,7 +32,7 @@ class ScrumboardColumnBloc
 
   Future<void> _mapEventToState(ScrumBoardColumnEvent event) {
     Future<void> future = Future.delayed(const Duration(seconds: 0), () {
-      event.execute(state.column.workItems);
+      event.execute(state.column.scrumboardColumnWorkItems!);
       _currentItems.add(state.column);
     });
     return future;

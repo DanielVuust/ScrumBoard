@@ -1,2 +1,11 @@
-example:
-  - hello:
+scrumBoardColumn:
+  - getScrumBoardColumns:
+  - insert:
+scrumBoard:
+  - get:
+  - addMockData:
+  - find:
+scrumBoardWorkItem:
+  - delete:
+  - insert:
+  - updateColumnWorkItems:

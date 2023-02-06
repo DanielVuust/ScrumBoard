@@ -71,6 +71,33 @@ class ScrumBoardGetInisialValueEvent extends ScrumBoardEvent {
   @override
   execute(ScrumBoardState state) async {
     state.scrumBoard = await client.scrumBoard.find(scrumBoardId) as ScrumBoard;
+  }
+}
 
+class ScrumBoardListenToWebSocketEvent extends ScrumBoardEvent {
+  @override
+  execute(ScrumBoardState state) async {
+    print("Connection opened");
+
+    await client.openStreamingConnection();
+
+    print("Connection opened done");
+
+    await for (var message in client.scrumBoardWebSocketEvent.stream) {
+      print("message:");
+
+      print(message.toJson());
+    }
+    print("dones");
+  }
+}
+
+class ScrumBoardNotifyOnScrumBoardChange extends ScrumBoardEvent {
+  @override
+  execute(ScrumBoardState state) async {
+    await client.openStreamingConnection();
+    await client.scrumBoardWebSocketEvent
+        .sendStreamMessage(User(firstName: '', lastName: ''));
+    print("Streamed Notification");
   }
 }

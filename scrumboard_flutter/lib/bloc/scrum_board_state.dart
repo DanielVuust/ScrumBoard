@@ -5,6 +5,6 @@ abstract class ScrumBoardState {
 }
 
 class ScrumBoardInitial extends ScrumBoardState {
-@override
+  @override
   late ScrumBoard scrumBoard = ScrumBoard();
 }

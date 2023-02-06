@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:scrumboard_client/scrumboard_client.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 
-
 part 'scrum_board_event.dart';
 part 'scrum_board_state.dart';
 
@@ -31,8 +30,9 @@ class ScrumBoardBloc extends Bloc<ScrumBoardEvent, ScrumBoardState> {
   }
 
   Future<void> _mapEventToState(ScrumBoardEvent event) async {
-
     await event.execute(state);
     _currentScrumBoard.add(state.scrumBoard);
+    ScrumBoardNotifyOnScrumBoardChange().execute(state);
+    ScrumBoardListenToWebSocketEvent().execute(state);
   }
 }

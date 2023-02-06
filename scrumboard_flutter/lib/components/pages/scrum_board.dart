@@ -22,8 +22,8 @@ class _ScrumBoardPageState extends State<ScrumBoardPage> {
   var scrumBoardBloc = ScrumBoardBloc();
 
   _ScrumBoardPageState() {
-    scrumBoardBloc.eventSink
-        .add(ScrumBoardGetInisialValueEvent(1));
+    scrumBoardBloc.eventSink.add(ScrumBoardGetInisialValueEvent(1));
+    scrumBoardBloc.eventSink.add(ScrumBoardListenToWebSocketEvent());
   }
 
   final log = logger(ScrumBoardPage);
@@ -51,7 +51,6 @@ class _ScrumBoardPageState extends State<ScrumBoardPage> {
               snapshot.data?.scrumBoardColumns == null) {
             return const Text('no Data');
           } else {
-
             return ListView.builder(
               scrollDirection: Axis.horizontal,
               key: Key(snapshot.data!.id.toString()),

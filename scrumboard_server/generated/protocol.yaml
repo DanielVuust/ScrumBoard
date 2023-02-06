@@ -2,9 +2,9 @@ scrumBoardColumn:
   - getScrumBoardColumns:
   - insert:
 scrumBoard:
-  - get:
   - addMockData:
   - find:
+scrumBoardWebSocketEvent:
 scrumBoardWorkItem:
   - delete:
   - insert:

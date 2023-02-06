@@ -2,11 +2,6 @@ import 'package:scrumboard_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
 class ScrumBoardEndpoint extends Endpoint {
-  Future<List<ScrumBoardColumn>> get(Session session, int scrumBoardId) async {
-    var test = ScrumBoardColumn.find(session);
-    return test;
-  }
-
   Future<List<ScrumBoardColumn>> addMockData(Session session) async {
     var user = User(firstName: "Daniel", lastName: "Vuust");
     User.insert(session, user);
@@ -44,7 +39,7 @@ class ScrumBoardEndpoint extends Endpoint {
 
     var scrumBoard = await ScrumBoard.findById(session, scrumBoadId);
     if (scrumBoard == null) {
-      return scrumBoard;
+      return null;
     }
     scrumBoard.scrumBoardColumns = await ScrumBoardColumn.find(session,
         where: (t) => t.scrumBoardId.equals(scrumBoard.id),
@@ -56,12 +51,11 @@ class ScrumBoardEndpoint extends Endpoint {
 
     for (int i = 0; i < scrumBoard.scrumBoardColumns!.length; i++) {
       scrumBoard.scrumBoardColumns![i].scrumboardColumnWorkItems =
-          await ScrumBoardWorkItem.find(session, 
+          await ScrumBoardWorkItem.find(session,
               where: (t) => t.scurmBoardColumnId
                   .equals(scrumBoard.scrumBoardColumns![i].id),
               orderBy: ScrumBoardWorkItem.t.columnIndex);
     }
     return scrumBoard;
   }
-  
 }

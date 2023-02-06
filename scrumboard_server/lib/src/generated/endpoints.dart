@@ -9,10 +9,11 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/scrum_board_column_endpoint.dart' as _i2;
 import '../endpoints/scrum_board_endpoint.dart' as _i3;
-import '../endpoints/scrum_board_work_item_endpoint.dart' as _i4;
-import 'package:scrumboard_server/src/generated/scrum_board_column.dart' as _i5;
+import '../endpoints/scrum_board_web_socket_event_endpoint.dart' as _i4;
+import '../endpoints/scrum_board_work_item_endpoint.dart' as _i5;
+import 'package:scrumboard_server/src/generated/scrum_board_column.dart' as _i6;
 import 'package:scrumboard_server/src/generated/scrum_board_work_item.dart'
-    as _i6;
+    as _i7;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -30,7 +31,13 @@ class Endpoints extends _i1.EndpointDispatch {
           'scrumBoard',
           null,
         ),
-      'scrumBoardWorkItem': _i4.ScrumBoardWorkItemEndpoint()
+      'scrumBoardWebSocketEvent': _i4.ScrumBoardWebSocketEvent()
+        ..initialize(
+          server,
+          'scrumBoardWebSocketEvent',
+          null,
+        ),
+      'scrumBoardWorkItem': _i5.ScrumBoardWorkItemEndpoint()
         ..initialize(
           server,
           'scrumBoardWorkItem',
@@ -65,7 +72,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'column': _i1.ParameterDescription(
               name: 'column',
-              type: _i1.getType<_i5.ScrumBoardColumn>(),
+              type: _i1.getType<_i6.ScrumBoardColumn>(),
               nullable: false,
             )
           },
@@ -85,24 +92,6 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'scrumBoard',
       endpoint: endpoints['scrumBoard']!,
       methodConnectors: {
-        'get': _i1.MethodConnector(
-          name: 'get',
-          params: {
-            'scrumBoardId': _i1.ParameterDescription(
-              name: 'scrumBoardId',
-              type: _i1.getType<int>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['scrumBoard'] as _i3.ScrumBoardEndpoint).get(
-            session,
-            params['scrumBoardId'],
-          ),
-        ),
         'addMockData': _i1.MethodConnector(
           name: 'addMockData',
           params: {},
@@ -133,6 +122,11 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
+    connectors['scrumBoardWebSocketEvent'] = _i1.EndpointConnector(
+      name: 'scrumBoardWebSocketEvent',
+      endpoint: endpoints['scrumBoardWebSocketEvent']!,
+      methodConnectors: {},
+    );
     connectors['scrumBoardWorkItem'] = _i1.EndpointConnector(
       name: 'scrumBoardWorkItem',
       endpoint: endpoints['scrumBoardWorkItem']!,
@@ -151,7 +145,7 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
           ) async =>
               (endpoints['scrumBoardWorkItem']
-                      as _i4.ScrumBoardWorkItemEndpoint)
+                      as _i5.ScrumBoardWorkItemEndpoint)
                   .delete(
             session,
             params['id'],
@@ -162,7 +156,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'workItem': _i1.ParameterDescription(
               name: 'workItem',
-              type: _i1.getType<_i6.ScrumBoardWorkItem>(),
+              type: _i1.getType<_i7.ScrumBoardWorkItem>(),
               nullable: false,
             )
           },
@@ -171,7 +165,7 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
           ) async =>
               (endpoints['scrumBoardWorkItem']
-                      as _i4.ScrumBoardWorkItemEndpoint)
+                      as _i5.ScrumBoardWorkItemEndpoint)
                   .insert(
             session,
             params['workItem'],
@@ -201,7 +195,7 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
           ) async =>
               (endpoints['scrumBoardWorkItem']
-                      as _i4.ScrumBoardWorkItemEndpoint)
+                      as _i5.ScrumBoardWorkItemEndpoint)
                   .updateColumnWorkItems(
             session,
             params['workItemId'],

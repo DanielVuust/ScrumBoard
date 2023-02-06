@@ -59,6 +59,11 @@ class _ScrumBoardColumnWidgetState extends State<ScrumBoardColumnWidget> {
                 )
               ],
             ),
+            Row(
+              children: const [
+                SizedBox(height: 50, child: Icon(Icons.remove)),
+              ],
+            ),
             Expanded(
               child: ListView.builder(
                 itemBuilder: (context, index) {
@@ -71,39 +76,6 @@ class _ScrumBoardColumnWidgetState extends State<ScrumBoardColumnWidget> {
                     widget.scrumBoardColumn.scrumboardColumnWorkItems?.length ??
                         0,
               ),
-              // child: StreamBuilder<ScrumBoard>(
-              //   stream: widget.bloc.state-,
-              //   builder:
-              //       (BuildContext context, AsyncSnapshot<ScrumBoard> snapshot) {
-              //     scrumBoardColumn.scrumboardColumnWorkItems;
-              //     if (snapshot.connectionState == ConnectionState.waiting) {
-              //       return const SizedBox(
-              //         height: 200,
-              //         width: 100,
-              //         child: CircularProgressIndicator(),
-              //       );
-              //     } else if (snapshot.connectionState == ConnectionState.done) {
-              //       return const Text('done');
-              //     } else if (snapshot.hasError) {
-              //       return const Text('Error!');
-              //     } else {
-              //       return ListView.builder(
-              //         key: Key(snapshot.data!.id.toString()),
-              //         itemBuilder: (context, index) {
-              //           return ScrumBoardDragableWorkItemWidget(
-              //               key: Key(snapshot
-              //                   .data!.scrumboardColumnWorkItems![index].id
-              //                   .toString()),
-              //               workItem: snapshot
-              //                   .data!.scrumboardColumnWorkItems![index],
-              //               bloc: bloc);
-              //         },
-              //         itemCount:
-              //             snapshot.data!.scrumboardColumnWorkItems!.length,
-              //       );
-              //     }
-              //   },
-              // ),
             ),
           ],
         ),

@@ -43,13 +43,6 @@ class _EndpointScrumBoard extends _i1.EndpointRef {
   @override
   String get name => 'scrumBoard';
 
-  _i2.Future<List<_i3.ScrumBoardColumn>> get(int scrumBoardId) =>
-      caller.callServerEndpoint<List<_i3.ScrumBoardColumn>>(
-        'scrumBoard',
-        'get',
-        {'scrumBoardId': scrumBoardId},
-      );
-
   _i2.Future<List<_i3.ScrumBoardColumn>> addMockData() =>
       caller.callServerEndpoint<List<_i3.ScrumBoardColumn>>(
         'scrumBoard',
@@ -63,6 +56,13 @@ class _EndpointScrumBoard extends _i1.EndpointRef {
         'find',
         {'scrumBoadId': scrumBoadId},
       );
+}
+
+class _EndpointScrumBoardWebSocketEvent extends _i1.EndpointRef {
+  _EndpointScrumBoardWebSocketEvent(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'scrumBoardWebSocketEvent';
 }
 
 class _EndpointScrumBoardWorkItem extends _i1.EndpointRef {
@@ -113,6 +113,7 @@ class Client extends _i1.ServerpodClient {
         ) {
     scrumBoardColumn = _EndpointScrumBoardColumn(this);
     scrumBoard = _EndpointScrumBoard(this);
+    scrumBoardWebSocketEvent = _EndpointScrumBoardWebSocketEvent(this);
     scrumBoardWorkItem = _EndpointScrumBoardWorkItem(this);
   }
 
@@ -120,12 +121,15 @@ class Client extends _i1.ServerpodClient {
 
   late final _EndpointScrumBoard scrumBoard;
 
+  late final _EndpointScrumBoardWebSocketEvent scrumBoardWebSocketEvent;
+
   late final _EndpointScrumBoardWorkItem scrumBoardWorkItem;
 
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'scrumBoardColumn': scrumBoardColumn,
         'scrumBoard': scrumBoard,
+        'scrumBoardWebSocketEvent': scrumBoardWebSocketEvent,
         'scrumBoardWorkItem': scrumBoardWorkItem,
       };
   @override

@@ -3,11 +3,15 @@ part of 'scrum_board_bloc.dart';
 abstract class ScrumBoardEvent {
   var client = Client('http://localhost:8080/')
     ..connectivityMonitor = FlutterConnectivityMonitor();
+  var log = logger(ScrumBoardEvent);
+  bool shouldUpdateWebSocketListeners = false;
   execute(ScrumBoardState state);
 }
 
 class ScrumBoardAddColumnEvent extends ScrumBoardEvent {
   final ScrumBoardColumn column;
+  @override
+  bool shouldUpdateWebSocketListeners = true;
 
   ScrumBoardAddColumnEvent(this.column);
   @override
@@ -20,10 +24,14 @@ class ScrumBoardAddColumnEvent extends ScrumBoardEvent {
 
 class ScrumBoardRemoveColumnEvent extends ScrumBoardEvent {
   @override
+  bool shouldUpdateWebSocketListeners = true;
+  @override
   execute(ScrumBoardState state) {}
 }
 
 class ScrumBoardMoveColumnItemEvent extends ScrumBoardEvent {
+  @override
+  bool shouldUpdateWebSocketListeners = true;
   @override
   execute(ScrumBoardState state) {}
 }
@@ -34,6 +42,8 @@ class ScrumBoardMoveWorkItemEvent extends ScrumBoardEvent {
   final int movedToWorkItemIndex;
   ScrumBoardMoveWorkItemEvent(
       this.workItemId, this.movedToColumnId, this.movedToWorkItemIndex);
+  @override
+  bool shouldUpdateWebSocketListeners = true;
   @override
   execute(ScrumBoardState state) async {
     await client.scrumBoardWorkItem.updateColumnWorkItems(
@@ -47,6 +57,8 @@ class ScrumBoardDeleteWorkItemEvent extends ScrumBoardEvent {
   final int workItemId;
   ScrumBoardDeleteWorkItemEvent(this.workItemId);
   @override
+  bool shouldUpdateWebSocketListeners = true;
+  @override
   execute(ScrumBoardState state) async {
     await client.scrumBoardWorkItem.delete(workItemId);
     state.scrumBoard =
@@ -58,6 +70,8 @@ class ScrumBoardAddWorkItemEvent extends ScrumBoardEvent {
   final ScrumBoardWorkItem workItem;
   ScrumBoardAddWorkItemEvent(this.workItem);
   @override
+  bool shouldUpdateWebSocketListeners = true;
+  @override
   execute(ScrumBoardState state) async {
     await client.scrumBoardWorkItem.insert(workItem);
     state.scrumBoard =
@@ -65,32 +79,15 @@ class ScrumBoardAddWorkItemEvent extends ScrumBoardEvent {
   }
 }
 
-class ScrumBoardGetInisialValueEvent extends ScrumBoardEvent {
+class ScrumBoardGetInitialValueEvent extends ScrumBoardEvent {
   final int scrumBoardId;
-  ScrumBoardGetInisialValueEvent(this.scrumBoardId);
+  ScrumBoardGetInitialValueEvent(this.scrumBoardId);
   @override
   execute(ScrumBoardState state) async {
     state.scrumBoard = await client.scrumBoard.find(scrumBoardId) as ScrumBoard;
   }
 }
 
-class ScrumBoardListenToWebSocketEvent extends ScrumBoardEvent {
-  @override
-  execute(ScrumBoardState state) async {
-    print("Connection opened");
-
-    await client.openStreamingConnection();
-
-    print("Connection opened done");
-
-    await for (var message in client.scrumBoardWebSocketEvent.stream) {
-      print("message:");
-
-      print(message.toJson());
-    }
-    print("dones");
-  }
-}
 
 class ScrumBoardNotifyOnScrumBoardChange extends ScrumBoardEvent {
   @override
@@ -98,6 +95,7 @@ class ScrumBoardNotifyOnScrumBoardChange extends ScrumBoardEvent {
     await client.openStreamingConnection();
     await client.scrumBoardWebSocketEvent
         .sendStreamMessage(User(firstName: '', lastName: ''));
-    print("Streamed Notification");
+    log.i("Streamed Notification");
+    await client.closeStreamingConnection();
   }
 }

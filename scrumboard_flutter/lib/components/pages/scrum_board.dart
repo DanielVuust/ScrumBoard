@@ -22,8 +22,7 @@ class _ScrumBoardPageState extends State<ScrumBoardPage> {
   var scrumBoardBloc = ScrumBoardBloc();
 
   _ScrumBoardPageState() {
-    scrumBoardBloc.eventSink.add(ScrumBoardGetInisialValueEvent(1));
-    scrumBoardBloc.eventSink.add(ScrumBoardListenToWebSocketEvent());
+    scrumBoardBloc.eventSink.add(ScrumBoardGetInitialValueEvent(1));
   }
 
   final log = logger(ScrumBoardPage);
@@ -47,9 +46,10 @@ class _ScrumBoardPageState extends State<ScrumBoardPage> {
             return const Text('done');
           } else if (snapshot.hasError) {
             return const Text('Error!');
-          } else if (snapshot.data == null ||
-              snapshot.data?.scrumBoardColumns == null) {
+          } else if (snapshot.data == null) {
             return const Text('no Data');
+          } else if (snapshot.data?.scrumBoardColumns == null) {
+            return const Text('no scrumBoardColumns');
           } else {
             return ListView.builder(
               scrollDirection: Axis.horizontal,

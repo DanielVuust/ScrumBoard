@@ -8,10 +8,10 @@ class EditScrumBoardColumnScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: prefer_const_constructors
     return Scaffold(
       appBar: AppBar(
-        title: const Text("New Column"),
+        //Dynamiclly set the heading of column page, depending on if the column has been saved in the db.
+        title: Text((column.id == null) ? "New Column" : "Edit Column"),
       ),
       body: ScrumBoardColumnEditFormWidget(
         column: column,

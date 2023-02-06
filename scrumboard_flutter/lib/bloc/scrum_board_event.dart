@@ -17,16 +17,18 @@ class ScrumBoardAddColumnEvent extends ScrumBoardEvent {
   @override
   execute(ScrumBoardState state) async {
     await client.scrumBoardColumn.insert(column);
-    state.scrumBoard =
-        await client.scrumBoard.find(state.scrumBoard.id!) as ScrumBoard;
   }
 }
 
-class ScrumBoardRemoveColumnEvent extends ScrumBoardEvent {
+class ScrumBoardDeleteColumnEvent extends ScrumBoardEvent {
+  final int columnId;
+  ScrumBoardDeleteColumnEvent(this.columnId);
   @override
   bool shouldUpdateWebSocketListeners = true;
   @override
-  execute(ScrumBoardState state) {}
+  execute(ScrumBoardState state) async {
+    await client.scrumBoardColumn.delete(columnId);
+  }
 }
 
 class ScrumBoardMoveColumnItemEvent extends ScrumBoardEvent {
@@ -34,6 +36,16 @@ class ScrumBoardMoveColumnItemEvent extends ScrumBoardEvent {
   bool shouldUpdateWebSocketListeners = true;
   @override
   execute(ScrumBoardState state) {}
+}
+class ScrumBoardEditColumnEvent extends ScrumBoardEvent {
+  final ScrumBoardColumn column;
+  ScrumBoardEditColumnEvent(this.column);
+  @override
+  bool shouldUpdateWebSocketListeners = true;
+  @override
+  execute(ScrumBoardState state) async {
+    await client.scrumBoardColumn.update(column);
+  }
 }
 
 class ScrumBoardMoveWorkItemEvent extends ScrumBoardEvent {
@@ -48,8 +60,6 @@ class ScrumBoardMoveWorkItemEvent extends ScrumBoardEvent {
   execute(ScrumBoardState state) async {
     await client.scrumBoardWorkItem.updateColumnWorkItems(
         workItemId, movedToColumnId, movedToWorkItemIndex);
-    state.scrumBoard =
-        await client.scrumBoard.find(state.scrumBoard.id!) as ScrumBoard;
   }
 }
 
@@ -61,8 +71,6 @@ class ScrumBoardDeleteWorkItemEvent extends ScrumBoardEvent {
   @override
   execute(ScrumBoardState state) async {
     await client.scrumBoardWorkItem.delete(workItemId);
-    state.scrumBoard =
-        await client.scrumBoard.find(state.scrumBoard.id!) as ScrumBoard;
   }
 }
 
@@ -74,8 +82,16 @@ class ScrumBoardAddWorkItemEvent extends ScrumBoardEvent {
   @override
   execute(ScrumBoardState state) async {
     await client.scrumBoardWorkItem.insert(workItem);
-    state.scrumBoard =
-        await client.scrumBoard.find(state.scrumBoard.id!) as ScrumBoard;
+  }
+}
+class ScrumBoardEditWorkItemEvent extends ScrumBoardEvent {
+  final ScrumBoardWorkItem workItem;
+  ScrumBoardEditWorkItemEvent(this.workItem);
+  @override
+  bool shouldUpdateWebSocketListeners = true;
+  @override
+  execute(ScrumBoardState state) async {
+    await client.scrumBoardWorkItem.update(workItem);
   }
 }
 

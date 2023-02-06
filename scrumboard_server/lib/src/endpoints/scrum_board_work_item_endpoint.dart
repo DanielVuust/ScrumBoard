@@ -1,3 +1,4 @@
+import 'package:darq/darq.dart';
 import 'package:scrumboard_server/src/generated/protocol.dart';
 import 'package:serverpod/server.dart';
 import 'package:serverpod/serverpod.dart';
@@ -8,7 +9,26 @@ class ScrumBoardWorkItemEndpoint extends Endpoint {
   }
 
   Future<void> insert(Session session, ScrumBoardWorkItem workItem) async {
+    var scrumBoardWorkItems = await ScrumBoardWorkItem.find(
+      session,
+      where: (p0) =>
+          (p0.scurmBoardColumnId.equals(workItem.scurmBoardColumnId) &
+              p0.columnIndex.notEquals(null)),
+    );
+    if (scrumBoardWorkItems.isNotEmpty) {
+      workItem.columnIndex = scrumBoardWorkItems
+              .aggregate((x, y) => x.columnIndex! > y.columnIndex! ? x : y)
+              .columnIndex! +
+          1;
+    } else {
+      workItem.columnIndex = 0;
+    }
+
     await ScrumBoardWorkItem.insert(session, workItem);
+  }
+
+  Future<void> update(Session session, ScrumBoardWorkItem workItem) async{
+    await ScrumBoardWorkItem.update(session, workItem);
   }
 
   Future<void> updateColumnWorkItems(Session session, int workItemId,
@@ -20,7 +40,8 @@ class ScrumBoardWorkItemEndpoint extends Endpoint {
       }
 
       var workItems = await ScrumBoardWorkItem.find(session, where: (t) {
-        return ((t.columnIndex >= movedToColumnIndex) & (t.scurmBoardColumnId.equals(movedToColumnId)));
+        return ((t.columnIndex >= movedToColumnIndex) &
+            (t.scurmBoardColumnId.equals(movedToColumnId)));
       });
       for (var element in workItems) {
         element.setColumn("columnIndex", element.columnIndex! + 1);
@@ -34,5 +55,4 @@ class ScrumBoardWorkItemEndpoint extends Endpoint {
     });
     return result;
   }
-  
 }

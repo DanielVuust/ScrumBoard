@@ -86,6 +86,44 @@ class Endpoints extends _i1.EndpointDispatch {
             params['column'],
           ),
         ),
+        'update': _i1.MethodConnector(
+          name: 'update',
+          params: {
+            'column': _i1.ParameterDescription(
+              name: 'column',
+              type: _i1.getType<_i6.ScrumBoardColumn>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['scrumBoardColumn'] as _i2.ScrumBoardColumnEndpoint)
+                  .update(
+            session,
+            params['column'],
+          ),
+        ),
+        'delete': _i1.MethodConnector(
+          name: 'delete',
+          params: {
+            'id': _i1.ParameterDescription(
+              name: 'id',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['scrumBoardColumn'] as _i2.ScrumBoardColumnEndpoint)
+                  .delete(
+            session,
+            params['id'],
+          ),
+        ),
       },
     );
     connectors['scrumBoard'] = _i1.EndpointConnector(
@@ -167,6 +205,26 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['scrumBoardWorkItem']
                       as _i5.ScrumBoardWorkItemEndpoint)
                   .insert(
+            session,
+            params['workItem'],
+          ),
+        ),
+        'update': _i1.MethodConnector(
+          name: 'update',
+          params: {
+            'workItem': _i1.ParameterDescription(
+              name: 'workItem',
+              type: _i1.getType<_i7.ScrumBoardWorkItem>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['scrumBoardWorkItem']
+                      as _i5.ScrumBoardWorkItemEndpoint)
+                  .update(
             session,
             params['workItem'],
           ),

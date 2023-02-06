@@ -3,7 +3,8 @@ import 'package:scrumboard_client/scrumboard_client.dart';
 
 //This widget is statefull as it need to keep track of the current work item.
 class ScrumBoardWorkItemEditFormWidget extends StatefulWidget {
-  const ScrumBoardWorkItemEditFormWidget({super.key});
+  final ScrumBoardWorkItem workItem;
+  const ScrumBoardWorkItemEditFormWidget({super.key, required this.workItem});
 
   @override
   State<ScrumBoardWorkItemEditFormWidget> createState() =>
@@ -12,8 +13,6 @@ class ScrumBoardWorkItemEditFormWidget extends StatefulWidget {
 
 class _ScrumBoardWorkItemEditFormWidgetState
     extends State<ScrumBoardWorkItemEditFormWidget> {
-  ScrumBoardWorkItem workItem =
-      ScrumBoardWorkItem(columnIndex: 22, description: '', name: '');
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -35,33 +34,33 @@ class _ScrumBoardWorkItemEditFormWidgetState
             child: Column(
               children: [
                 TextFormField(
-                  initialValue: workItem.name,
+                  initialValue: widget.workItem.name,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.person),
                     hintText: 'Name for new work item',
                     labelText: 'Name *',
                   ),
                   validator: (String? value) {
-                    workItem.name = value ?? "";
+                    widget.workItem.name = value ?? "";
                     return null;
                   },
                 ),
                 TextFormField(
-                  initialValue: workItem.description,
+                  initialValue: widget.workItem.description,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.person),
                     hintText: 'Description for new work item',
                     labelText: 'Description *',
                   ),
                   validator: (String? value) {
-                    workItem.description = value ?? "";
+                    widget.workItem.description = value ?? "";
                     return null;
                   },
                 ),
                 ElevatedButton(
                     onPressed: (() {
                       if (_formKey.currentState?.validate() ?? false) {
-                        Navigator.pop(context, workItem);
+                        Navigator.pop(context, widget.workItem);
                       }
                     }),
                     child: Container(

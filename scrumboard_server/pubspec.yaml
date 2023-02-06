@@ -7,6 +7,7 @@ environment:
   sdk: '>=2.17.0 <3.0.0'
 
 dependencies:
+  darq: ^1.2.1
   logger: ^1.1.0
   serverpod: ^1.0.0
 

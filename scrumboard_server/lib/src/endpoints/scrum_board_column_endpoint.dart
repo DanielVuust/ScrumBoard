@@ -24,4 +24,12 @@ class ScrumBoardColumnEndpoint extends Endpoint {
     }
     await ScrumBoardColumn.insert(session, column);
   }
+
+  Future<void> update(Session session, ScrumBoardColumn column) async {
+    await ScrumBoardColumn.update(session, column);
+  }
+
+  Future<void> delete(Session session, int id) async {
+    await ScrumBoardColumn.delete(session, where: (x) => x.id.equals(id));
+  }
 }

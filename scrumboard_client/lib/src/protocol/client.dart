@@ -35,6 +35,19 @@ class _EndpointScrumBoardColumn extends _i1.EndpointRef {
         'insert',
         {'column': column},
       );
+
+  _i2.Future<void> update(_i3.ScrumBoardColumn column) =>
+      caller.callServerEndpoint<void>(
+        'scrumBoardColumn',
+        'update',
+        {'column': column},
+      );
+
+  _i2.Future<void> delete(int id) => caller.callServerEndpoint<void>(
+        'scrumBoardColumn',
+        'delete',
+        {'id': id},
+      );
 }
 
 class _EndpointScrumBoard extends _i1.EndpointRef {
@@ -81,6 +94,13 @@ class _EndpointScrumBoardWorkItem extends _i1.EndpointRef {
       caller.callServerEndpoint<void>(
         'scrumBoardWorkItem',
         'insert',
+        {'workItem': workItem},
+      );
+
+  _i2.Future<void> update(_i5.ScrumBoardWorkItem workItem) =>
+      caller.callServerEndpoint<void>(
+        'scrumBoardWorkItem',
+        'update',
         {'workItem': workItem},
       );
 

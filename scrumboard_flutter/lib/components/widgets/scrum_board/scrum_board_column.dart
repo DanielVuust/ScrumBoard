@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:scrumboard_client/scrumboard_client.dart';
 
 import '../../../bloc/scrum_board_bloc.dart';
-import '../../pages/new_scrum_board_work_item.dart';
+import '../../pages/sub_pages/edit_scrum_board_column.dart';
+import '../../pages/sub_pages/new_scrum_board_work_item.dart';
+import '../../pages/sub_pages_helper.dart';
 import 'scrum_board_draggable_work_item.dart';
 
 class ScrumBoardColumnWidget extends StatefulWidget {
@@ -21,10 +23,13 @@ class _ScrumBoardColumnWidgetState extends State<ScrumBoardColumnWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(4),
+    return GestureDetector(
+      onDoubleTap: () {
+        _showColumnEditForm(context);
+      },
       child: Container(
         padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8),
         color: backgroundColor,
         width: 200,
         height: 1100,
@@ -51,17 +56,11 @@ class _ScrumBoardColumnWidgetState extends State<ScrumBoardColumnWidget> {
                   child: IconButton(
                       alignment: Alignment.centerRight,
                       onPressed: () {
-                        // bloc.eventSink.add(ScrumBoardColumnRemoveEvent(null));
-                        _awaitReturnFromWorkItemEditForm(context);
+                        _showWorkItemEditForm(context);
                       },
                       icon: const Icon(Icons.add),
                       color: const Color(0xFF000A1F)),
                 )
-              ],
-            ),
-            Row(
-              children: const [
-                SizedBox(height: 50, child: Icon(Icons.remove)),
               ],
             ),
             Expanded(
@@ -77,20 +76,39 @@ class _ScrumBoardColumnWidgetState extends State<ScrumBoardColumnWidget> {
                         0,
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      //TODO logging.
+                      widget.bloc.eventSink.add(ScrumBoardDeleteColumnEvent(
+                          widget.scrumBoardColumn.id!));
+                    },
+                    icon: const Icon(Icons.delete),
+                    color: const Color(0xFF000A1F))
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  void _awaitReturnFromWorkItemEditForm(BuildContext context) async {
-    final ScrumBoardWorkItem workItem = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const NewScrumBoardWorkItem(),
-      ),
-    );
-    workItem.scurmBoardColumnId = widget.scrumBoardColumn.id;
-    widget.bloc.eventSink.add(ScrumBoardAddWorkItemEvent(workItem));
+  void _showWorkItemEditForm(BuildContext context) async {
+    var returnedWorkItem =
+        await SubPageHelper().awaitReturnFromWorkItemEditForm(context, null);
+    if (returnedWorkItem == null) return;
+
+    returnedWorkItem.scurmBoardColumnId = widget.scrumBoardColumn.id;
+    widget.bloc.eventSink.add(ScrumBoardAddWorkItemEvent(returnedWorkItem));
+  }
+
+  void _showColumnEditForm(BuildContext context) async {
+    var returnedColumn =
+        await SubPageHelper().awaitReturnFromColumnEditForm(context, widget.scrumBoardColumn);
+    if (returnedColumn == null) return;
+
+    widget.bloc.eventSink.add(ScrumBoardEditColumnEvent(returnedColumn));
   }
 }

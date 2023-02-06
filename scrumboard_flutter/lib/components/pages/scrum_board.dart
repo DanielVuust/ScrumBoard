@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:scrumboard_client/scrumboard_client.dart';
+import 'package:scrumboard_flutter/components/pages/sub_pages/edit_scrum_board_column.dart';
+import 'package:scrumboard_flutter/components/pages/sub_pages_helper.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 
 import '../../bloc/scrum_board_bloc.dart';
 import '../../logging.dart';
 import '../widgets/scrum_board/scrum_board_column.dart';
-import 'edit_scrum_board_column.dart';
 
 class ScrumBoardPage extends StatefulWidget {
   final int scrumBoardId;
@@ -90,7 +91,7 @@ class _ScrumBoardPageState extends State<ScrumBoardPage> {
           FloatingActionButton(
             heroTag: "btn1",
             onPressed: () async {
-              _awaitReturnFromColumnEditForm(context);
+              _showColumnEditForm(context);
             },
             child: const Icon(Icons.add),
           ),
@@ -99,15 +100,12 @@ class _ScrumBoardPageState extends State<ScrumBoardPage> {
     );
   }
 
-  void _awaitReturnFromColumnEditForm(BuildContext context) async {
-    final ScrumBoardColumn column = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            EditScrumBoardColumnScreen(column: ScrumBoardColumn(heading: "")),
-      ),
-    );
-    column.scrumBoardId = 1;
-    scrumBoardBloc.eventSink.add(ScrumBoardAddColumnEvent(column));
+  void _showColumnEditForm(BuildContext context) async {
+    var returnedColumn =
+        await SubPageHelper().awaitReturnFromColumnEditForm(context, null);
+    if (returnedColumn == null) return;
+    
+    returnedColumn.scrumBoardId = scrumBoardBloc.state.scrumBoard.id;
+    scrumBoardBloc.eventSink.add(ScrumBoardAddColumnEvent(returnedColumn));
   }
 }

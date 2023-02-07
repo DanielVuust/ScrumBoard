@@ -12,10 +12,10 @@ class ScrumBoardWorkItem extends _i1.TableRow {
   ScrumBoardWorkItem({
     int? id,
     required this.name,
-    this.scurmBoardColumnId,
+    required this.scurmBoardColumnId,
     required this.description,
     this.responsibleUserId,
-    this.columnIndex,
+    required this.columnIndex,
   }) : super(id);
 
   factory ScrumBoardWorkItem.fromJson(
@@ -26,13 +26,13 @@ class ScrumBoardWorkItem extends _i1.TableRow {
       id: serializationManager.deserialize<int?>(jsonSerialization['id']),
       name: serializationManager.deserialize<String>(jsonSerialization['name']),
       scurmBoardColumnId: serializationManager
-          .deserialize<int?>(jsonSerialization['scurmBoardColumnId']),
+          .deserialize<int>(jsonSerialization['scurmBoardColumnId']),
       description: serializationManager
           .deserialize<String>(jsonSerialization['description']),
       responsibleUserId: serializationManager
           .deserialize<int?>(jsonSerialization['responsibleUserId']),
       columnIndex: serializationManager
-          .deserialize<int?>(jsonSerialization['columnIndex']),
+          .deserialize<int>(jsonSerialization['columnIndex']),
     );
   }
 
@@ -40,13 +40,13 @@ class ScrumBoardWorkItem extends _i1.TableRow {
 
   String name;
 
-  int? scurmBoardColumnId;
+  int scurmBoardColumnId;
 
   String description;
 
   int? responsibleUserId;
 
-  int? columnIndex;
+  int columnIndex;
 
   @override
   String get tableName => 'scrum_board_work_items';

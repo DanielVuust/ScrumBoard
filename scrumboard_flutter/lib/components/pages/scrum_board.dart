@@ -20,9 +20,15 @@ class _ScrumBoardPageState extends State<ScrumBoardPage> {
     ..connectivityMonitor = FlutterConnectivityMonitor();
 
   var scrumBoardBloc = ScrumBoardBloc();
-
-  _ScrumBoardPageState() {
-    scrumBoardBloc.eventSink.add(ScrumBoardGetInitialValueEvent(1));
+  @override
+  void initState() {
+    super.initState();
+    try {
+      scrumBoardBloc.eventSink
+          .add(ScrumBoardGetInitialValueEvent(widget.scrumBoardId));
+    } catch (e) {
+      print(e);
+    }
   }
 
   final log = logger(ScrumBoardPage);
@@ -33,7 +39,7 @@ class _ScrumBoardPageState extends State<ScrumBoardPage> {
       appBar: AppBar(
         title: const Text("Scrum Board"),
       ),
-      body: StreamBuilder<ScrumBoard>(
+      body: StreamBuilder<ScrumBoardState>(
         stream: scrumBoardBloc.scrumBoard,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -48,45 +54,26 @@ class _ScrumBoardPageState extends State<ScrumBoardPage> {
             return const Text('Error!');
           } else if (snapshot.data == null) {
             return const Text('no Data');
-          } else if (snapshot.data?.scrumBoardColumns == null) {
+          } else if (snapshot.data?.scrumBoard.scrumBoardColumns == null) {
             return const Text('no scrumBoardColumns');
           } else {
             return ListView.builder(
               scrollDirection: Axis.horizontal,
-              key: Key(snapshot.data!.id.toString()),
+              key: Key(snapshot.data!.scrumBoard.id.toString()),
               itemBuilder: (context, index) {
                 return ScrumBoardColumnWidget(
-                  scrumBoardColumn: snapshot.data!.scrumBoardColumns![index],
+                  scrumBoardColumn: snapshot.data!.scrumBoard.scrumBoardColumns![index],
                   bloc: scrumBoardBloc,
                 );
               },
-              itemCount: snapshot.data!.scrumBoardColumns!.length,
+              itemCount: snapshot.data!.scrumBoard.scrumBoardColumns!.length,
             );
           }
         },
       ),
-      // body: ReorderableListView.builder(
-      //   scrollDirection: Axis.horizontal,
-      //   padding: const EdgeInsets.all(8),
-      //   itemBuilder: (BuildContext context, int index) {
-      //     return ScrumBoardColumnWidget(
-      //       scrumBoardColumn: l[index],
-      //       key: Key(l[index].id.toString()),
-      //     );
-      //   },
-      //   itemCount: l.length,
-      //   onReorder: (int oldIndex, int newIndex) {},
-      // ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            heroTag: "btn2",
-            onPressed: () async {
-              log.d(await client.scrumBoard.addMockData());
-            },
-            child: const Text("Add mock data"),
-          ),
           FloatingActionButton(
             heroTag: "btn1",
             onPressed: () async {

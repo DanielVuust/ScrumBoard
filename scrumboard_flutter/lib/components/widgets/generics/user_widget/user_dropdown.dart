@@ -16,27 +16,21 @@ class UserDropDown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: key,
-      child: DropdownButton(
-        value: users.any((element) => element.id == currentUserId)
-            ? users.firstWhere((element) => element.id == currentUserId)
-            //User with id 0 represents an unassiged user.
-            : users.firstWhere((element) => element.id == 0),
-        items: users.map((User user) {
-          return DropdownMenuItem(
-            value: user,
-            child: Text(
-              "${user.firstName} ${user.lastName}",
-            ),
-          );
-        }).toList(),
-        onChanged: (User? user) {
-          if (user != null) {
-            onChanged(user);
-          }
-        },
-      ),
+    return DropdownButton(
+      value: users.firstWhere((element) => element.id == currentUserId),
+      items: users.map((User user) {
+        return DropdownMenuItem(
+          value: user,
+          child: Text(
+            "${user.firstName} ${user.lastName}",
+          ),
+        );
+      }).toList(),
+      onChanged: (User? user) {
+        if (user != null) {
+          onChanged(user);
+        }
+      },
     );
   }
 }

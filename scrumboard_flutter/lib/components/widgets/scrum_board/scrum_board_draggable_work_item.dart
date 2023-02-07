@@ -24,19 +24,11 @@ class _ScrumBoardDragableWorkItemWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return
-        // IntrinsicHeight(
-        //   child:
-        Stack(
+    return Stack(
       children: [
         Container(
           margin: EdgeInsets.only(top: padding),
-          // padding: EdgeInsets.only(top: widget.padding),
           child: Draggable<ScrumBoardWorkItem>(
-            onDragCompleted: () => {
-              // widget.bloc.eventSink
-              //     .add(ScrumBoardColumnRemoveEvent(widget.workItem))
-            },
             data: widget.workItem,
             feedback: SizedBox(
               width: 200,
@@ -65,7 +57,7 @@ class _ScrumBoardDragableWorkItemWidgetState
           onAccept: (data) => {
             //Adds the current widget to the column bloc.
             widget.bloc.eventSink.add(
-                ScrumBoardMoveWorkItemEvent(data.id!, widget.workItem.scurmBoardColumnId!, widget.workItem.columnIndex!)),
+                ScrumBoardMoveWorkItemEvent(data.id!, widget.workItem.scurmBoardColumnId, widget.workItem.columnIndex)),
 
             setState(() {
               padding = 0;
@@ -84,7 +76,7 @@ class _ScrumBoardDragableWorkItemWidgetState
           },
           builder: (context, _, __) => const SizedBox(
             width: 200,
-            height: 100,
+            height: 200,
           ),
         ),
       ],

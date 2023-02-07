@@ -52,10 +52,10 @@ ALTER TABLE ONLY "users"
 CREATE TABLE "scrum_board_work_items" (
   "id" serial,
   "name" text NOT NULL,
-  "scurmBoardColumnId" integer,
+  "scurmBoardColumnId" integer NOT NULL,
   "description" text NOT NULL,
   "responsibleUserId" integer,
-  "columnIndex" integer
+  "columnIndex" integer NOT NULL
 );
 
 ALTER TABLE ONLY "scrum_board_work_items"

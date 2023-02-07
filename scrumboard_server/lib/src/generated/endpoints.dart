@@ -44,10 +44,10 @@ class Endpoints extends _i1.EndpointDispatch {
           'scrumBoardWorkItem',
           null,
         ),
-      'userEndpoing': _i6.UserEndpoing()
+      'user': _i6.UserEndpoint()
         ..initialize(
           server,
-          'userEndpoing',
+          'user',
           null,
         ),
     };
@@ -137,16 +137,6 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'scrumBoard',
       endpoint: endpoints['scrumBoard']!,
       methodConnectors: {
-        'addMockData': _i1.MethodConnector(
-          name: 'addMockData',
-          params: {},
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['scrumBoard'] as _i3.ScrumBoardEndpoint)
-                  .addMockData(session),
-        ),
         'find': _i1.MethodConnector(
           name: 'find',
           params: {
@@ -164,6 +154,16 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             params['scrumBoadId'],
           ),
+        ),
+        'getAll': _i1.MethodConnector(
+          name: 'getAll',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['scrumBoard'] as _i3.ScrumBoardEndpoint)
+                  .getAll(session),
         ),
       },
     );
@@ -270,9 +270,9 @@ class Endpoints extends _i1.EndpointDispatch {
         ),
       },
     );
-    connectors['userEndpoing'] = _i1.EndpointConnector(
-      name: 'userEndpoing',
-      endpoint: endpoints['userEndpoing']!,
+    connectors['user'] = _i1.EndpointConnector(
+      name: 'user',
+      endpoint: endpoints['user']!,
       methodConnectors: {
         'getAllUsers': _i1.MethodConnector(
           name: 'getAllUsers',
@@ -281,8 +281,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['userEndpoing'] as _i6.UserEndpoing)
-                  .getAllUsers(session),
+              (endpoints['user'] as _i6.UserEndpoint).getAllUsers(session),
         )
       },
     );

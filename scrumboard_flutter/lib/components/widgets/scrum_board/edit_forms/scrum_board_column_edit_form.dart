@@ -44,6 +44,7 @@ class _ScrumBoardColumnEditFormWidgetState
                     return null;
                   },
                 ),
+                const Spacer(),
                 ElevatedButton(
                     onPressed: (() {
                       if (_formKey.currentState?.validate() ?? false) {

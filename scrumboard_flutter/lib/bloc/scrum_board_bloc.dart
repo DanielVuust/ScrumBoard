@@ -11,12 +11,12 @@ part 'scrum_board_state.dart';
 
 class ScrumBoardBloc extends Bloc<ScrumBoardEvent, ScrumBoardState> {
   var log = logger(ScrumBoardBloc);
-  final _scrumBoardChangedController = StreamController<ScrumBoard>();
+  final _scrumBoardChangedController = StreamController<ScrumBoardState>();
 
-  StreamSink<ScrumBoard> get _currentScrumBoard =>
+  StreamSink<ScrumBoardState> get _currentScrumBoard =>
       _scrumBoardChangedController.sink;
 
-  Stream<ScrumBoard> get scrumBoard {
+  Stream<ScrumBoardState> get scrumBoard {
     return _scrumBoardChangedController.stream;
   }
 
@@ -29,19 +29,19 @@ class ScrumBoardBloc extends Bloc<ScrumBoardEvent, ScrumBoardState> {
 
   ScrumBoardBloc() : super(ScrumBoardInitial()) {
     _eventStreamController.stream.listen(_mapEventToState);
-    _currentScrumBoard.add(state.scrumBoard);
-    _test();
+    _currentScrumBoard.add(state);
+    _startListingToWebSockectEvents();
   }
 
   Future<void> _mapEventToState(ScrumBoardEvent event) async {
     await event.execute(state);
-    _currentScrumBoard.add(state.scrumBoard);
-    if (event.shouldUpdateWebSocketListeners) {
+    _currentScrumBoard.add(state);
+    if (event.shouldUpdateWebSocketListeners()) {
       ScrumBoardNotifyOnScrumBoardChange().execute(state);
     }
   }
 
-  _test() async {
+  _startListingToWebSockectEvents() async {
     var client = Client('http://localhost:8080/')
       ..connectivityMonitor = FlutterConnectivityMonitor();
     try {
@@ -50,13 +50,13 @@ class ScrumBoardBloc extends Bloc<ScrumBoardEvent, ScrumBoardState> {
       log.i("Streaming connection opened, now waiting for event");
 
       await for (var message in client.scrumBoardWebSocketEvent.stream) {
-        log.d("Websocket evnet hit ");
+        log.d("Websocket evnet hit");
 
         if (message is ScrumBoard) {
           log.d("Websocket: Updating scrum board");
           
           state.scrumBoard = message;
-          _currentScrumBoard.add(state.scrumBoard);
+          _currentScrumBoard.add(state);
           
           continue;
         }
@@ -64,16 +64,10 @@ class ScrumBoardBloc extends Bloc<ScrumBoardEvent, ScrumBoardState> {
         
         log.i("Could not resolve message from web socket");
       }
-
     } catch (ex) {
-      
       log.e(ex);
-    
     } finally {
-    
-      log.wtf("Should not be here");
       client.closeStreamingConnection();
-    
     }
   }
 }

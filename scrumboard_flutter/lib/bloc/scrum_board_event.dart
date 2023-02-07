@@ -1,17 +1,25 @@
 part of 'scrum_board_bloc.dart';
 
 abstract class ScrumBoardEvent {
+  //Client that connects frontend to backend.
   var client = Client('http://localhost:8080/')
     ..connectivityMonitor = FlutterConnectivityMonitor();
+
   var log = logger(ScrumBoardEvent);
-  bool shouldUpdateWebSocketListeners = false;
+
+  bool shouldUpdateWebSocketListeners() {
+    return false;
+  }
+
   execute(ScrumBoardState state);
 }
 
 class ScrumBoardAddColumnEvent extends ScrumBoardEvent {
   final ScrumBoardColumn column;
   @override
-  bool shouldUpdateWebSocketListeners = true;
+  bool shouldUpdateWebSocketListeners() {
+    return true;
+  }
 
   ScrumBoardAddColumnEvent(this.column);
   @override
@@ -23,8 +31,12 @@ class ScrumBoardAddColumnEvent extends ScrumBoardEvent {
 class ScrumBoardDeleteColumnEvent extends ScrumBoardEvent {
   final int columnId;
   ScrumBoardDeleteColumnEvent(this.columnId);
+
   @override
-  bool shouldUpdateWebSocketListeners = true;
+  bool shouldUpdateWebSocketListeners() {
+    return true;
+  }
+
   @override
   execute(ScrumBoardState state) async {
     await client.scrumBoardColumn.delete(columnId);
@@ -33,7 +45,10 @@ class ScrumBoardDeleteColumnEvent extends ScrumBoardEvent {
 
 class ScrumBoardMoveColumnItemEvent extends ScrumBoardEvent {
   @override
-  bool shouldUpdateWebSocketListeners = true;
+  bool shouldUpdateWebSocketListeners() {
+    return true;
+  }
+
   @override
   execute(ScrumBoardState state) {}
 }
@@ -41,8 +56,12 @@ class ScrumBoardMoveColumnItemEvent extends ScrumBoardEvent {
 class ScrumBoardEditColumnEvent extends ScrumBoardEvent {
   final ScrumBoardColumn column;
   ScrumBoardEditColumnEvent(this.column);
+
   @override
-  bool shouldUpdateWebSocketListeners = true;
+  bool shouldUpdateWebSocketListeners() {
+    return true;
+  }
+
   @override
   execute(ScrumBoardState state) async {
     await client.scrumBoardColumn.update(column);
@@ -55,8 +74,12 @@ class ScrumBoardMoveWorkItemEvent extends ScrumBoardEvent {
   final int movedToWorkItemIndex;
   ScrumBoardMoveWorkItemEvent(
       this.workItemId, this.movedToColumnId, this.movedToWorkItemIndex);
+
   @override
-  bool shouldUpdateWebSocketListeners = true;
+  bool shouldUpdateWebSocketListeners() {
+    return true;
+  }
+
   @override
   execute(ScrumBoardState state) async {
     await client.scrumBoardWorkItem.updateColumnWorkItems(
@@ -67,8 +90,12 @@ class ScrumBoardMoveWorkItemEvent extends ScrumBoardEvent {
 class ScrumBoardDeleteWorkItemEvent extends ScrumBoardEvent {
   final int workItemId;
   ScrumBoardDeleteWorkItemEvent(this.workItemId);
+
   @override
-  bool shouldUpdateWebSocketListeners = true;
+  bool shouldUpdateWebSocketListeners() {
+    return true;
+  }
+
   @override
   execute(ScrumBoardState state) async {
     await client.scrumBoardWorkItem.delete(workItemId);
@@ -78,8 +105,12 @@ class ScrumBoardDeleteWorkItemEvent extends ScrumBoardEvent {
 class ScrumBoardAddWorkItemEvent extends ScrumBoardEvent {
   final ScrumBoardWorkItem workItem;
   ScrumBoardAddWorkItemEvent(this.workItem);
+
   @override
-  bool shouldUpdateWebSocketListeners = true;
+  bool shouldUpdateWebSocketListeners() {
+    return true;
+  }
+
   @override
   execute(ScrumBoardState state) async {
     await client.scrumBoardWorkItem.insert(workItem);
@@ -89,8 +120,12 @@ class ScrumBoardAddWorkItemEvent extends ScrumBoardEvent {
 class ScrumBoardEditWorkItemEvent extends ScrumBoardEvent {
   final ScrumBoardWorkItem workItem;
   ScrumBoardEditWorkItemEvent(this.workItem);
+
   @override
-  bool shouldUpdateWebSocketListeners = true;
+  bool shouldUpdateWebSocketListeners() {
+    return true;
+  }
+
   @override
   execute(ScrumBoardState state) async {
     await client.scrumBoardWorkItem.update(workItem);
@@ -112,9 +147,12 @@ class ScrumBoardWorkItemChangeResposibleUser extends ScrumBoardEvent {
 class ScrumBoardGetInitialValueEvent extends ScrumBoardEvent {
   final int scrumBoardId;
   ScrumBoardGetInitialValueEvent(this.scrumBoardId);
+
   @override
   execute(ScrumBoardState state) async {
     state.scrumBoard = await client.scrumBoard.find(scrumBoardId) as ScrumBoard;
+
+    state.assignableUsers = await client.user.getAllUsers();
   }
 }
 

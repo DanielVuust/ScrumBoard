@@ -4,13 +4,13 @@ scrumBoardColumn:
   - update:
   - delete:
 scrumBoard:
-  - addMockData:
   - find:
+  - getAll:
 scrumBoardWebSocketEvent:
 scrumBoardWorkItem:
   - delete:
   - insert:
   - update:
   - updateColumnWorkItems:
-userEndpoing:
+user:
   - getAllUsers:

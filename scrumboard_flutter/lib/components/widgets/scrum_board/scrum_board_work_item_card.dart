@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:scrumboard_client/scrumboard_client.dart';
-import 'package:serverpod_flutter/serverpod_flutter.dart';
 
 import '../../../bloc/scrum_board_bloc.dart';
 import '../../pages/sub_pages_helper.dart';
@@ -15,10 +13,6 @@ class ScrumBoardWorkItemCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: todo
-    //TODO Remove and get users from DB.
-    var client = Client('http://localhost:8080/')
-      ..connectivityMonitor = FlutterConnectivityMonitor();
     return GestureDetector(
       onDoubleTap: () {
         _showColumnEditForm(context);
@@ -44,64 +38,28 @@ class ScrumBoardWorkItemCardWidget extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text("Index:${workItem.columnIndex}"),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Id:${workItem.id}"),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
               child: Text(workItem.description.toString()),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ButtonBar(
-                  children: [
-                    FutureBuilder(
-                      future: client.userEndpoing.getAllUsers(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const SizedBox(
-                            height: 10,
-                            width: 10,
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.done) {
-                          return UserDropDown(
-                            currentUserId: workItem.responsibleUserId,
-                            users: snapshot.data,
-                            onChanged: (p0) {
-                              bloc.eventSink.add(
-                                  ScrumBoardWorkItemChangeResposibleUser(
-                                      workItem, p0.id!));
-                            },
-                          );
-                        } else if (snapshot.hasError) {
-                          return const Text('Error!');
-                        } else if (snapshot.data == null) {
-                          return const Text('no Data');
-                        }
-                        return const Text('default');
-                      },
-                      // other arguments
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        bloc.eventSink
-                            .add(ScrumBoardDeleteWorkItemEvent(workItem.id!));
-                      },
-                      icon: const Icon(Icons.delete),
-                      color: const Color(0xFF000A1F),
-                    ),
-                  ],
-                )
-              ],
+            
+            UserDropDown(
+              currentUserId: workItem.responsibleUserId,
+              users: bloc.state.assignableUsers,
+              onChanged: (p0) {
+                bloc.eventSink.add(
+                    ScrumBoardWorkItemChangeResposibleUser(
+                        workItem, p0.id!));
+              },
             ),
+            IconButton(
+              onPressed: () {
+                bloc.eventSink
+                    .add(ScrumBoardDeleteWorkItemEvent(workItem.id!));
+              },
+              icon: const Icon(Icons.delete),
+              color: const Color(0xFF000A1F),
+            ),
+              
+              
           ],
         ),
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'components/widgets/app_theme.dart';
 import 'components/widgets/app_routes.dart';
+import 'components/widgets/app_theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +25,7 @@ class _AppState extends State<App> {
         if (snapshot.hasError) {
           return const Text('error');
         }
-
+        
         return MaterialApp(routes: appRoutes, theme: appTheme);
       },
     );

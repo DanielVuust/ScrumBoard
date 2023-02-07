@@ -11,13 +11,12 @@ class SubPageHelper {
   ///or to edit an exsistion one. Setting parameter [scrumBoardColumn] to null means a new column
   ///should be created.
   ///Returns: [Future<ScrumBoardColumn?>], null meaning the user backed out of the subPage and no
-  /// information was included in the subpage Navigator.pop.
-
+  ///information was included in the subpage Navigator.pop.
   Future<ScrumBoardColumn?> awaitReturnFromColumnEditForm(
       BuildContext context, ScrumBoardColumn? scrumBoardColumn) async {
     scrumBoardColumn ??= ScrumBoardColumn(heading: "");
 
-    final ScrumBoardColumn returnedColumn = await Navigator.push(
+    final ScrumBoardColumn? returnedColumn = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) =>
@@ -30,9 +29,10 @@ class SubPageHelper {
 
   Future<ScrumBoardWorkItem?> awaitReturnFromWorkItemEditForm(
       BuildContext context, ScrumBoardWorkItem? workItem) async {
-    workItem ??= ScrumBoardWorkItem(name: "", description: "");
+    //If workItem is null then set it to ScrumBoardWorkItem(name: "", description: "").
+    workItem ??= ScrumBoardWorkItem(name: "", description: "", columnIndex: 0, scurmBoardColumnId: 0);
 
-    final ScrumBoardWorkItem returnedWorkItem = await Navigator.push(
+    final ScrumBoardWorkItem? returnedWorkItem = await Navigator.push(
       context,
       MaterialPageRoute(
         //We set workItem to non nullable with ! as we make sure that workItem never will be null as the first thing in this method.

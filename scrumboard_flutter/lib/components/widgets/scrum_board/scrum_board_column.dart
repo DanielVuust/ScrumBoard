@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:scrumboard_client/scrumboard_client.dart';
 
 import '../../../bloc/scrum_board_bloc.dart';
-import '../../pages/sub_pages/edit_scrum_board_column.dart';
-import '../../pages/sub_pages/new_scrum_board_work_item.dart';
 import '../../pages/sub_pages_helper.dart';
 import 'scrum_board_draggable_work_item.dart';
 
@@ -27,69 +25,74 @@ class _ScrumBoardColumnWidgetState extends State<ScrumBoardColumnWidget> {
       onDoubleTap: () {
         _showColumnEditForm(context);
       },
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        margin: const EdgeInsets.all(8),
-        color: backgroundColor,
-        width: 200,
-        height: 1100,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-                  child: Text(
-                    widget.scrumBoardColumn.heading,
-                    textAlign: TextAlign.start,
-                    textScaleFactor: 2,
+      child: DragTarget<ScrumBoardWorkItem>(
+        onAccept: (ScrumBoardWorkItem data) => {
+          widget.bloc.eventSink.add(ScrumBoardMoveWorkItemEvent(
+              data.id!, widget.scrumBoardColumn.id!, data.columnIndex)),
+        },
+        builder: (context, _, __) => Container(
+          padding: const EdgeInsets.all(8),
+          margin: const EdgeInsets.all(8),
+          color: backgroundColor,
+          width: 200,
+          height: 1100,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+                    child: Text(
+                      widget.scrumBoardColumn.heading,
+                      textAlign: TextAlign.start,
+                      textScaleFactor: 2,
+                    ),
                   ),
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.orange,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                      alignment: Alignment.centerRight,
-                      onPressed: () {
-                        _showWorkItemEditForm(context);
-                      },
-                      icon: const Icon(Icons.add),
-                      color: const Color(0xFF000A1F)),
-                )
-              ],
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return ScrumBoardDragableWorkItemWidget(
-                      workItem: widget
-                          .scrumBoardColumn.scrumboardColumnWorkItems![index],
-                      bloc: widget.bloc);
-                },
-                itemCount:
-                    widget.scrumBoardColumn.scrumboardColumnWorkItems?.length ??
-                        0,
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.orange,
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                        alignment: Alignment.centerRight,
+                        onPressed: () {
+                          _showWorkItemEditForm(context);
+                        },
+                        icon: const Icon(Icons.add),
+                        color: const Color(0xFF000A1F)),
+                  )
+                ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                    onPressed: () {
-                      //TODO logging.
-                      widget.bloc.eventSink.add(ScrumBoardDeleteColumnEvent(
-                          widget.scrumBoardColumn.id!));
-                    },
-                    icon: const Icon(Icons.delete),
-                    color: const Color(0xFF000A1F))
-              ],
-            ),
-          ],
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    return ScrumBoardDragableWorkItemWidget(
+                        workItem: widget
+                            .scrumBoardColumn.scrumboardColumnWorkItems![index],
+                        bloc: widget.bloc);
+                  },
+                  itemCount: widget
+                          .scrumBoardColumn.scrumboardColumnWorkItems?.length ??
+                      0,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        widget.bloc.eventSink.add(ScrumBoardDeleteColumnEvent(
+                            widget.scrumBoardColumn.id!));
+                      },
+                      icon: const Icon(Icons.delete),
+                      color: const Color(0xFF000A1F))
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -102,7 +105,7 @@ class _ScrumBoardColumnWidgetState extends State<ScrumBoardColumnWidget> {
 
     //UserId 0 represents unassigned.
     returnedWorkItem.responsibleUserId ??= 0;
-    returnedWorkItem.scurmBoardColumnId = widget.scrumBoardColumn.id;
+    returnedWorkItem.scurmBoardColumnId = widget.scrumBoardColumn.id ?? 0;
     widget.bloc.eventSink.add(ScrumBoardAddWorkItemEvent(returnedWorkItem));
   }
 

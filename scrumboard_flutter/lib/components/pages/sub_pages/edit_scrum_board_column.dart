@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scrumboard_client/scrumboard_client.dart';
-import 'package:scrumboard_flutter/components/widgets/scrum_board/scrum_board_column_edit_form.dart';
+import 'package:scrumboard_flutter/components/widgets/scrum_board/edit_forms/scrum_board_column_edit_form.dart';
 
 class EditScrumBoardColumnScreen extends StatelessWidget {
   final ScrumBoardColumn column;

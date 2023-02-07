@@ -12,16 +12,15 @@ class ScrumBoardWorkItemEndpoint extends Endpoint {
     var scrumBoardWorkItems = await ScrumBoardWorkItem.find(
       session,
       where: (p0) =>
-          (p0.scurmBoardColumnId.equals(workItem.scurmBoardColumnId) &
-              p0.columnIndex.notEquals(null)),
+          (p0.scurmBoardColumnId.equals(workItem.scurmBoardColumnId)),
     );
     if (scrumBoardWorkItems.isNotEmpty) {
       workItem.columnIndex = scrumBoardWorkItems
-              .aggregate((x, y) => x.columnIndex! > y.columnIndex! ? x : y)
-              .columnIndex! +
+              .aggregate((x, y) => x.columnIndex > y.columnIndex ? x : y)
+              .columnIndex +
           1;
     } else {
-      workItem.columnIndex = 0;
+      workItem.columnIndex = 1;
     }
 
     await ScrumBoardWorkItem.insert(session, workItem);
@@ -44,7 +43,7 @@ class ScrumBoardWorkItemEndpoint extends Endpoint {
             (t.scurmBoardColumnId.equals(movedToColumnId)));
       });
       for (var element in workItems) {
-        element.setColumn("columnIndex", element.columnIndex! + 1);
+        element.setColumn("columnIndex", element.columnIndex + 1);
         await session.db.update(element);
       }
 

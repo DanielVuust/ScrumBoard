@@ -1,5 +1,4 @@
 import 'package:scrumboard_server/src/endpoints/scrum_board_endpoint.dart';
-import 'package:scrumboard_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
 class ScrumBoardWebSocketEvent extends Endpoint {
@@ -13,9 +12,9 @@ class ScrumBoardWebSocketEvent extends Endpoint {
 
   @override
   Future<void> handleStreamMessage(
-      StreamingSession session, SerializableEntity object) async {
+      StreamingSession session, SerializableEntity message) async {
     session.log("Handling Stream Message");
-    session.log("Object to handle: ${object.toString()}");
+    session.log("Object to handle: ${message.toString()}");
 
     session.messages.postMessage("Scrumboard",
         (await ScrumBoardEndpoint().find(session, 1) as SerializableEntity));

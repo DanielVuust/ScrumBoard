@@ -32,6 +32,20 @@ ALTER TABLE ONLY "scrum_board_column"
         ON DELETE CASCADE;
 
 --
+-- Class User as table users
+--
+
+CREATE TABLE "users" (
+  "id" serial,
+  "firstName" text,
+  "lastName" text
+);
+
+ALTER TABLE ONLY "users"
+  ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
 -- Class ScrumBoardWorkItem as table scrum_board_work_items
 --
 
@@ -40,7 +54,7 @@ CREATE TABLE "scrum_board_work_items" (
   "name" text NOT NULL,
   "scurmBoardColumnId" integer,
   "description" text NOT NULL,
-  "responsibleUser" json,
+  "responsibleUserId" integer,
   "columnIndex" integer
 );
 
@@ -52,18 +66,9 @@ ALTER TABLE ONLY "scrum_board_work_items"
     FOREIGN KEY("scurmBoardColumnId")
       REFERENCES scrum_board_column(id)
         ON DELETE CASCADE;
-
---
--- Class User as table users
---
-
-CREATE TABLE "users" (
-  "id" serial,
-  "firstName" text NOT NULL,
-  "lastName" text NOT NULL
-);
-
-ALTER TABLE ONLY "users"
-  ADD CONSTRAINT users_pkey PRIMARY KEY (id);
-
+ALTER TABLE ONLY "scrum_board_work_items"
+  ADD CONSTRAINT scrum_board_work_items_fk_1
+    FOREIGN KEY("responsibleUserId")
+      REFERENCES users(id)
+        ON DELETE CASCADE;
 

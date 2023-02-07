@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:scrumboard_client/scrumboard_client.dart';
-import 'package:scrumboard_flutter/components/pages/sub_pages/edit_scrum_board_column.dart';
 import 'package:scrumboard_flutter/components/pages/sub_pages_helper.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 
@@ -104,7 +103,7 @@ class _ScrumBoardPageState extends State<ScrumBoardPage> {
     var returnedColumn =
         await SubPageHelper().awaitReturnFromColumnEditForm(context, null);
     if (returnedColumn == null) return;
-    
+
     returnedColumn.scrumBoardId = scrumBoardBloc.state.scrumBoard.id;
     scrumBoardBloc.eventSink.add(ScrumBoardAddColumnEvent(returnedColumn));
   }

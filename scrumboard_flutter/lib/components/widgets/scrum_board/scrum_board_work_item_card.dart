@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:scrumboard_client/scrumboard_client.dart';
+import 'package:serverpod_flutter/serverpod_flutter.dart';
 
 import '../../../bloc/scrum_board_bloc.dart';
 import '../../pages/sub_pages_helper.dart';
+import '../generics/user_widget/user_dropdown.dart';
 
 class ScrumBoardWorkItemCardWidget extends StatelessWidget {
   final ScrumBoardWorkItem workItem;
@@ -14,13 +17,8 @@ class ScrumBoardWorkItemCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: todo
     //TODO Remove and get users from DB.
-    const List<String> users = [
-      'User1',
-      'User2',
-      'User3',
-      'User4',
-      'User5',
-    ];
+    var client = Client('http://localhost:8080/')
+      ..connectivityMonitor = FlutterConnectivityMonitor();
     return GestureDetector(
       onDoubleTap: () {
         _showColumnEditForm(context);
@@ -61,25 +59,36 @@ class ScrumBoardWorkItemCardWidget extends StatelessWidget {
               children: [
                 ButtonBar(
                   children: [
-                    DropdownButton(
-                      focusColor: const Color(0xFF000A1F),
-                      value: users.first,
-                      icon: const Icon(Icons.keyboard_arrow_down),
-                      items: users.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(
-                            items,
-                            style: const TextStyle(
-                              color: Color(0xFF000A1F),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        // ignore: todo
-                        //TODO Change user.
+                    FutureBuilder(
+                      future: client.userEndpoing.getAllUsers(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const SizedBox(
+                            height: 10,
+                            width: 10,
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.done) {
+                          return UserDropDown(
+                            currentUserId: workItem.responsibleUserId,
+                            users: snapshot.data,
+                            onChanged: (p0) {
+                              bloc.eventSink.add(
+                                  ScrumBoardWorkItemChangeResposibleUser(
+                                      workItem, p0.id!));
+                            },
+                          );
+                        } else if (snapshot.hasError) {
+                          return const Text('Error!');
+                        } else if (snapshot.data == null) {
+                          return const Text('no Data');
+                        }
+                        return const Text('default');
                       },
+                      // other arguments
                     ),
                     IconButton(
                       onPressed: () {

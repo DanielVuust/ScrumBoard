@@ -11,8 +11,8 @@ import 'package:serverpod/serverpod.dart' as _i1;
 class User extends _i1.TableRow {
   User({
     int? id,
-    required this.firstName,
-    required this.lastName,
+    this.firstName,
+    this.lastName,
   }) : super(id);
 
   factory User.fromJson(
@@ -22,17 +22,17 @@ class User extends _i1.TableRow {
     return User(
       id: serializationManager.deserialize<int?>(jsonSerialization['id']),
       firstName: serializationManager
-          .deserialize<String>(jsonSerialization['firstName']),
+          .deserialize<String?>(jsonSerialization['firstName']),
       lastName: serializationManager
-          .deserialize<String>(jsonSerialization['lastName']),
+          .deserialize<String?>(jsonSerialization['lastName']),
     );
   }
 
   static final t = UserTable();
 
-  String firstName;
+  String? firstName;
 
-  String lastName;
+  String? lastName;
 
   @override
   String get tableName => 'users';

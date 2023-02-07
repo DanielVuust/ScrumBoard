@@ -14,7 +14,8 @@ import 'scrum_board_work_item.dart' as _i4;
 import 'user.dart' as _i5;
 import 'protocol.dart' as _i6;
 import 'package:scrumboard_server/src/generated/scrum_board_column.dart' as _i7;
-import 'package:serverpod/protocol.dart' as _i8;
+import 'package:scrumboard_server/src/generated/user.dart' as _i8;
+import 'package:serverpod/protocol.dart' as _i9;
 export 'scrum_board.dart';
 export 'scrum_board_column.dart';
 export 'scrum_board_work_item.dart';
@@ -83,8 +84,12 @@ class Protocol extends _i1.SerializationManagerServer {
           .map((e) => deserialize<_i7.ScrumBoardColumn>(e))
           .toList() as dynamic;
     }
+    if (t == List<_i8.User>) {
+      return (data as List).map((e) => deserialize<_i8.User>(e)).toList()
+          as dynamic;
+    }
     try {
-      return _i8.Protocol().deserialize<T>(data, t);
+      return _i9.Protocol().deserialize<T>(data, t);
     } catch (_) {}
     return super.deserialize<T>(data, t);
   }
@@ -126,7 +131,7 @@ class Protocol extends _i1.SerializationManagerServer {
   @override
   _i1.Table? getTableForType(Type t) {
     {
-      var table = _i8.Protocol().getTableForType(t);
+      var table = _i9.Protocol().getTableForType(t);
       if (table != null) {
         return table;
       }

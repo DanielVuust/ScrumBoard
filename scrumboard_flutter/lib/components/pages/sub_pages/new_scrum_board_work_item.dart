@@ -9,12 +9,13 @@ class NewScrumBoardWorkItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: prefer_const_constructors
     return Scaffold(
       appBar: AppBar(
         title: const Text("New Work Item"),
       ),
-      body: ScrumBoardWorkItemEditFormWidget(workItem: workItem,),
+      body: ScrumBoardWorkItemEditFormWidget(
+        workItem: workItem,
+      ),
     );
   }
 }

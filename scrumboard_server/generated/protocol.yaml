@@ -12,3 +12,5 @@ scrumBoardWorkItem:
   - insert:
   - update:
   - updateColumnWorkItems:
+userEndpoing:
+  - getAllUsers:

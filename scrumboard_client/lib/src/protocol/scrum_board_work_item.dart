@@ -7,7 +7,6 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import 'protocol.dart' as _i2;
 
 class ScrumBoardWorkItem extends _i1.SerializableEntity {
   ScrumBoardWorkItem({
@@ -15,7 +14,7 @@ class ScrumBoardWorkItem extends _i1.SerializableEntity {
     required this.name,
     this.scurmBoardColumnId,
     required this.description,
-    this.responsibleUser,
+    this.responsibleUserId,
     this.columnIndex,
   });
 
@@ -30,8 +29,8 @@ class ScrumBoardWorkItem extends _i1.SerializableEntity {
           .deserialize<int?>(jsonSerialization['scurmBoardColumnId']),
       description: serializationManager
           .deserialize<String>(jsonSerialization['description']),
-      responsibleUser: serializationManager
-          .deserialize<_i2.User?>(jsonSerialization['responsibleUser']),
+      responsibleUserId: serializationManager
+          .deserialize<int?>(jsonSerialization['responsibleUserId']),
       columnIndex: serializationManager
           .deserialize<int?>(jsonSerialization['columnIndex']),
     );
@@ -48,7 +47,7 @@ class ScrumBoardWorkItem extends _i1.SerializableEntity {
 
   String description;
 
-  _i2.User? responsibleUser;
+  int? responsibleUserId;
 
   int? columnIndex;
 
@@ -59,7 +58,7 @@ class ScrumBoardWorkItem extends _i1.SerializableEntity {
       'name': name,
       'scurmBoardColumnId': scurmBoardColumnId,
       'description': description,
-      'responsibleUser': responsibleUser,
+      'responsibleUserId': responsibleUserId,
       'columnIndex': columnIndex,
     };
   }

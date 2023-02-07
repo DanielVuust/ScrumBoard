@@ -14,6 +14,7 @@ import 'scrum_board_work_item.dart' as _i4;
 import 'user.dart' as _i5;
 import 'protocol.dart' as _i6;
 import 'package:scrumboard_client/src/protocol/scrum_board_column.dart' as _i7;
+import 'package:scrumboard_client/src/protocol/user.dart' as _i8;
 export 'scrum_board.dart';
 export 'scrum_board_column.dart';
 export 'scrum_board_work_item.dart';
@@ -82,6 +83,10 @@ class Protocol extends _i1.SerializationManager {
       return (data as List)
           .map((e) => deserialize<_i7.ScrumBoardColumn>(e))
           .toList() as dynamic;
+    }
+    if (t == List<_i8.User>) {
+      return (data as List).map((e) => deserialize<_i8.User>(e)).toList()
+          as dynamic;
     }
     return super.deserialize<T>(data, t);
   }

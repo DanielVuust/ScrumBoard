@@ -22,7 +22,7 @@ class ScrumBoardEndpoint extends Endpoint {
             description: "Description",
             name: "WorkItem $j $i",
             scurmBoardColumnId: scrumBoardColumn.id,
-            responsibleUser: await User.findById(session, 1));
+            responsibleUserId: (await User.findById(session, 1))!.id);
         await ScrumBoardWorkItem.insert(session, workitem);
       }
     }

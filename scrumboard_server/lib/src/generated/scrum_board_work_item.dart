@@ -7,7 +7,6 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import 'protocol.dart' as _i2;
 
 class ScrumBoardWorkItem extends _i1.TableRow {
   ScrumBoardWorkItem({
@@ -15,7 +14,7 @@ class ScrumBoardWorkItem extends _i1.TableRow {
     required this.name,
     this.scurmBoardColumnId,
     required this.description,
-    this.responsibleUser,
+    this.responsibleUserId,
     this.columnIndex,
   }) : super(id);
 
@@ -30,8 +29,8 @@ class ScrumBoardWorkItem extends _i1.TableRow {
           .deserialize<int?>(jsonSerialization['scurmBoardColumnId']),
       description: serializationManager
           .deserialize<String>(jsonSerialization['description']),
-      responsibleUser: serializationManager
-          .deserialize<_i2.User?>(jsonSerialization['responsibleUser']),
+      responsibleUserId: serializationManager
+          .deserialize<int?>(jsonSerialization['responsibleUserId']),
       columnIndex: serializationManager
           .deserialize<int?>(jsonSerialization['columnIndex']),
     );
@@ -45,7 +44,7 @@ class ScrumBoardWorkItem extends _i1.TableRow {
 
   String description;
 
-  _i2.User? responsibleUser;
+  int? responsibleUserId;
 
   int? columnIndex;
 
@@ -58,7 +57,7 @@ class ScrumBoardWorkItem extends _i1.TableRow {
       'name': name,
       'scurmBoardColumnId': scurmBoardColumnId,
       'description': description,
-      'responsibleUser': responsibleUser,
+      'responsibleUserId': responsibleUserId,
       'columnIndex': columnIndex,
     };
   }
@@ -70,7 +69,7 @@ class ScrumBoardWorkItem extends _i1.TableRow {
       'name': name,
       'scurmBoardColumnId': scurmBoardColumnId,
       'description': description,
-      'responsibleUser': responsibleUser,
+      'responsibleUserId': responsibleUserId,
       'columnIndex': columnIndex,
     };
   }
@@ -82,7 +81,7 @@ class ScrumBoardWorkItem extends _i1.TableRow {
       'name': name,
       'scurmBoardColumnId': scurmBoardColumnId,
       'description': description,
-      'responsibleUser': responsibleUser,
+      'responsibleUserId': responsibleUserId,
       'columnIndex': columnIndex,
     };
   }
@@ -105,8 +104,8 @@ class ScrumBoardWorkItem extends _i1.TableRow {
       case 'description':
         description = value;
         return;
-      case 'responsibleUser':
-        responsibleUser = value;
+      case 'responsibleUserId':
+        responsibleUserId = value;
         return;
       case 'columnIndex':
         columnIndex = value;
@@ -242,7 +241,7 @@ class ScrumBoardWorkItemTable extends _i1.Table {
 
   final description = _i1.ColumnString('description');
 
-  final responsibleUser = _i1.ColumnSerializable('responsibleUser');
+  final responsibleUserId = _i1.ColumnInt('responsibleUserId');
 
   final columnIndex = _i1.ColumnInt('columnIndex');
 
@@ -252,7 +251,7 @@ class ScrumBoardWorkItemTable extends _i1.Table {
         name,
         scurmBoardColumnId,
         description,
-        responsibleUser,
+        responsibleUserId,
         columnIndex,
       ];
 }

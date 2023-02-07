@@ -37,6 +37,7 @@ class ScrumBoardMoveColumnItemEvent extends ScrumBoardEvent {
   @override
   execute(ScrumBoardState state) {}
 }
+
 class ScrumBoardEditColumnEvent extends ScrumBoardEvent {
   final ScrumBoardColumn column;
   ScrumBoardEditColumnEvent(this.column);
@@ -84,6 +85,7 @@ class ScrumBoardAddWorkItemEvent extends ScrumBoardEvent {
     await client.scrumBoardWorkItem.insert(workItem);
   }
 }
+
 class ScrumBoardEditWorkItemEvent extends ScrumBoardEvent {
   final ScrumBoardWorkItem workItem;
   ScrumBoardEditWorkItemEvent(this.workItem);
@@ -91,6 +93,18 @@ class ScrumBoardEditWorkItemEvent extends ScrumBoardEvent {
   bool shouldUpdateWebSocketListeners = true;
   @override
   execute(ScrumBoardState state) async {
+    await client.scrumBoardWorkItem.update(workItem);
+  }
+}
+
+class ScrumBoardWorkItemChangeResposibleUser extends ScrumBoardEvent {
+  final ScrumBoardWorkItem workItem;
+  final int userId;
+  ScrumBoardWorkItemChangeResposibleUser(this.workItem, this.userId);
+
+  @override
+  execute(ScrumBoardState state) async {
+    workItem.responsibleUserId = userId;
     await client.scrumBoardWorkItem.update(workItem);
   }
 }
@@ -103,7 +117,6 @@ class ScrumBoardGetInitialValueEvent extends ScrumBoardEvent {
     state.scrumBoard = await client.scrumBoard.find(scrumBoardId) as ScrumBoard;
   }
 }
-
 
 class ScrumBoardNotifyOnScrumBoardChange extends ScrumBoardEvent {
   @override

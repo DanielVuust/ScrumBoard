@@ -11,9 +11,10 @@ import '../endpoints/scrum_board_column_endpoint.dart' as _i2;
 import '../endpoints/scrum_board_endpoint.dart' as _i3;
 import '../endpoints/scrum_board_web_socket_event_endpoint.dart' as _i4;
 import '../endpoints/scrum_board_work_item_endpoint.dart' as _i5;
-import 'package:scrumboard_server/src/generated/scrum_board_column.dart' as _i6;
+import '../endpoints/user_endpoint.dart' as _i6;
+import 'package:scrumboard_server/src/generated/scrum_board_column.dart' as _i7;
 import 'package:scrumboard_server/src/generated/scrum_board_work_item.dart'
-    as _i7;
+    as _i8;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -41,6 +42,12 @@ class Endpoints extends _i1.EndpointDispatch {
         ..initialize(
           server,
           'scrumBoardWorkItem',
+          null,
+        ),
+      'userEndpoing': _i6.UserEndpoing()
+        ..initialize(
+          server,
+          'userEndpoing',
           null,
         ),
     };
@@ -72,7 +79,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'column': _i1.ParameterDescription(
               name: 'column',
-              type: _i1.getType<_i6.ScrumBoardColumn>(),
+              type: _i1.getType<_i7.ScrumBoardColumn>(),
               nullable: false,
             )
           },
@@ -91,7 +98,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'column': _i1.ParameterDescription(
               name: 'column',
-              type: _i1.getType<_i6.ScrumBoardColumn>(),
+              type: _i1.getType<_i7.ScrumBoardColumn>(),
               nullable: false,
             )
           },
@@ -194,7 +201,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'workItem': _i1.ParameterDescription(
               name: 'workItem',
-              type: _i1.getType<_i7.ScrumBoardWorkItem>(),
+              type: _i1.getType<_i8.ScrumBoardWorkItem>(),
               nullable: false,
             )
           },
@@ -214,7 +221,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'workItem': _i1.ParameterDescription(
               name: 'workItem',
-              type: _i1.getType<_i7.ScrumBoardWorkItem>(),
+              type: _i1.getType<_i8.ScrumBoardWorkItem>(),
               nullable: false,
             )
           },
@@ -261,6 +268,22 @@ class Endpoints extends _i1.EndpointDispatch {
             params['movedToColumnIndex'],
           ),
         ),
+      },
+    );
+    connectors['userEndpoing'] = _i1.EndpointConnector(
+      name: 'userEndpoing',
+      endpoint: endpoints['userEndpoing']!,
+      methodConnectors: {
+        'getAllUsers': _i1.MethodConnector(
+          name: 'getAllUsers',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['userEndpoing'] as _i6.UserEndpoing)
+                  .getAllUsers(session),
+        )
       },
     );
   }

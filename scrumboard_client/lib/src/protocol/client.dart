@@ -12,8 +12,9 @@ import 'package:scrumboard_client/src/protocol/scrum_board_column.dart' as _i3;
 import 'package:scrumboard_client/src/protocol/scrum_board.dart' as _i4;
 import 'package:scrumboard_client/src/protocol/scrum_board_work_item.dart'
     as _i5;
-import 'dart:io' as _i6;
-import 'protocol.dart' as _i7;
+import 'package:scrumboard_client/src/protocol/user.dart' as _i6;
+import 'dart:io' as _i7;
+import 'protocol.dart' as _i8;
 
 class _EndpointScrumBoardColumn extends _i1.EndpointRef {
   _EndpointScrumBoardColumn(_i1.EndpointCaller caller) : super(caller);
@@ -120,14 +121,28 @@ class _EndpointScrumBoardWorkItem extends _i1.EndpointRef {
       );
 }
 
+class _EndpointUserEndpoing extends _i1.EndpointRef {
+  _EndpointUserEndpoing(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'userEndpoing';
+
+  _i2.Future<List<_i6.User>> getAllUsers() =>
+      caller.callServerEndpoint<List<_i6.User>>(
+        'userEndpoing',
+        'getAllUsers',
+        {},
+      );
+}
+
 class Client extends _i1.ServerpodClient {
   Client(
     String host, {
-    _i6.SecurityContext? context,
+    _i7.SecurityContext? context,
     _i1.AuthenticationKeyManager? authenticationKeyManager,
   }) : super(
           host,
-          _i7.Protocol(),
+          _i8.Protocol(),
           context: context,
           authenticationKeyManager: authenticationKeyManager,
         ) {
@@ -135,6 +150,7 @@ class Client extends _i1.ServerpodClient {
     scrumBoard = _EndpointScrumBoard(this);
     scrumBoardWebSocketEvent = _EndpointScrumBoardWebSocketEvent(this);
     scrumBoardWorkItem = _EndpointScrumBoardWorkItem(this);
+    userEndpoing = _EndpointUserEndpoing(this);
   }
 
   late final _EndpointScrumBoardColumn scrumBoardColumn;
@@ -145,12 +161,15 @@ class Client extends _i1.ServerpodClient {
 
   late final _EndpointScrumBoardWorkItem scrumBoardWorkItem;
 
+  late final _EndpointUserEndpoing userEndpoing;
+
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'scrumBoardColumn': scrumBoardColumn,
         'scrumBoard': scrumBoard,
         'scrumBoardWebSocketEvent': scrumBoardWebSocketEvent,
         'scrumBoardWorkItem': scrumBoardWorkItem,
+        'userEndpoing': userEndpoing,
       };
   @override
   Map<String, _i1.ModuleEndpointCaller> get moduleLookup => {};

@@ -100,13 +100,15 @@ class _ScrumBoardColumnWidgetState extends State<ScrumBoardColumnWidget> {
         await SubPageHelper().awaitReturnFromWorkItemEditForm(context, null);
     if (returnedWorkItem == null) return;
 
+    //UserId 0 represents unassigned.
+    returnedWorkItem.responsibleUserId ??= 0;
     returnedWorkItem.scurmBoardColumnId = widget.scrumBoardColumn.id;
     widget.bloc.eventSink.add(ScrumBoardAddWorkItemEvent(returnedWorkItem));
   }
 
   void _showColumnEditForm(BuildContext context) async {
-    var returnedColumn =
-        await SubPageHelper().awaitReturnFromColumnEditForm(context, widget.scrumBoardColumn);
+    var returnedColumn = await SubPageHelper()
+        .awaitReturnFromColumnEditForm(context, widget.scrumBoardColumn);
     if (returnedColumn == null) return;
 
     widget.bloc.eventSink.add(ScrumBoardEditColumnEvent(returnedColumn));

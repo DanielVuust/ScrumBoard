@@ -4,5 +4,5 @@ fields:
   name: String
   scurmBoardColumnId: int?, parent=scrum_board_column
   description: String
-  responsibleUser: User?
+  responsibleUserId: int?, parent=users
   columnIndex: int?

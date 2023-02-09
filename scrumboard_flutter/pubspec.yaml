@@ -35,6 +35,9 @@ dependencies:
   bloc: ^8.1.1
   logger: ^1.1.0
   serverpod: ^1.0.0
+  firebase_core: ^2.4.1
+  flutter_sms: ^2.3.3
+  url_launcher: ^6.1.9
 
 dev_dependencies:
   flutter_lints: ^2.0.1

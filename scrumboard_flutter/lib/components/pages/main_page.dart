@@ -12,7 +12,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  var client = Client('http://localhost:8080/')
+  var client = Client('http://10.0.2.2:8080/')
     ..connectivityMonitor = FlutterConnectivityMonitor();
 
   @override
@@ -46,8 +46,8 @@ class _MainPageState extends State<MainPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                ScrumBoardPage(scrumBoardId: snapshot.data![index].id!),            
+                                builder: (context) => ScrumBoardPage(
+                                    scrumBoardId: snapshot.data![index].id!),
                               ),
                             );
                           },

@@ -42,7 +42,7 @@ class ScrumBoardBloc extends Bloc<ScrumBoardEvent, ScrumBoardState> {
   }
 
   _startListingToWebSockectEvents() async {
-    var client = Client('http://localhost:8080/')
+    var client = Client('http://10.0.2.2:8080/')
       ..connectivityMonitor = FlutterConnectivityMonitor();
     try {
       await client.openStreamingConnection();
@@ -54,14 +54,13 @@ class ScrumBoardBloc extends Bloc<ScrumBoardEvent, ScrumBoardState> {
 
         if (message is ScrumBoard) {
           log.d("Websocket: Updating scrum board");
-          
+
           state.scrumBoard = message;
           _currentScrumBoard.add(state);
-          
+
           continue;
         }
 
-        
         log.i("Could not resolve message from web socket");
       }
     } catch (ex) {

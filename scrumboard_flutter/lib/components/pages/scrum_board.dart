@@ -16,7 +16,7 @@ class ScrumBoardPage extends StatefulWidget {
 }
 
 class _ScrumBoardPageState extends State<ScrumBoardPage> {
-  var client = Client('http://localhost:8080/')
+  var client = Client('http://10.0.2.2:8080/')
     ..connectivityMonitor = FlutterConnectivityMonitor();
 
   var scrumBoardBloc = ScrumBoardBloc();
@@ -62,7 +62,8 @@ class _ScrumBoardPageState extends State<ScrumBoardPage> {
               key: Key(snapshot.data!.scrumBoard.id.toString()),
               itemBuilder: (context, index) {
                 return ScrumBoardColumnWidget(
-                  scrumBoardColumn: snapshot.data!.scrumBoard.scrumBoardColumns![index],
+                  scrumBoardColumn:
+                      snapshot.data!.scrumBoard.scrumBoardColumns![index],
                   bloc: scrumBoardBloc,
                 );
               },

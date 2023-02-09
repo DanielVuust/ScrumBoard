@@ -58,15 +58,16 @@ class _ScrumBoardWorkItemEditFormWidgetState
                   },
                 ),
                 ElevatedButton(
-                    onPressed: (() {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        Navigator.pop(context, widget.workItem);
-                      }
-                    }),
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      child: const Text("Create"),
-                    ))
+                  onPressed: (() {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      Navigator.pop(context, widget.workItem);
+                    }
+                  }),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    child: const Text("Ok"),
+                  ),
+                ),
               ],
             ),
           ),

@@ -12,7 +12,7 @@ class ScrumBoardColumnEditFormWidget extends StatefulWidget {
 
 class _ScrumBoardColumnEditFormWidgetState
     extends State<ScrumBoardColumnEditFormWidget> {
-    final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class _ScrumBoardColumnEditFormWidgetState
                     }),
                     child: Container(
                       padding: const EdgeInsets.all(8),
-                      child: const Text("Create"),
+                      child: const Text("Ok"),
                     ))
               ],
             ),

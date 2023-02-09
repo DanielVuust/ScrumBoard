@@ -2,7 +2,7 @@ part of 'scrum_board_bloc.dart';
 
 abstract class ScrumBoardEvent {
   //Client that connects frontend to backend.
-  var client = Client('http://localhost:8080/')
+  var client = Client('http://10.0.2.2:8080/')
     ..connectivityMonitor = FlutterConnectivityMonitor();
 
   var log = logger(ScrumBoardEvent);

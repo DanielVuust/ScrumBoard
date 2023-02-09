@@ -21,7 +21,6 @@ class _ScrumBoardDragableWorkItemWidgetState
   late double padding = 0;
   final log = logger(_ScrumBoardDragableWorkItemWidgetState);
 
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -56,8 +55,10 @@ class _ScrumBoardDragableWorkItemWidgetState
         DragTarget<ScrumBoardWorkItem>(
           onAccept: (data) => {
             //Adds the current widget to the column bloc.
-            widget.bloc.eventSink.add(
-                ScrumBoardMoveWorkItemEvent(data.id!, widget.workItem.scurmBoardColumnId, widget.workItem.columnIndex)),
+            widget.bloc.eventSink.add(ScrumBoardMoveWorkItemEvent(
+                data.id!,
+                widget.workItem.scurmBoardColumnId,
+                widget.workItem.columnIndex)),
 
             setState(() {
               padding = 0;

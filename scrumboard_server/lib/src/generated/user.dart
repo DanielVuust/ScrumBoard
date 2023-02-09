@@ -13,6 +13,7 @@ class User extends _i1.TableRow {
     int? id,
     this.firstName,
     this.lastName,
+    this.phoneNumber,
   }) : super(id);
 
   factory User.fromJson(
@@ -25,6 +26,8 @@ class User extends _i1.TableRow {
           .deserialize<String?>(jsonSerialization['firstName']),
       lastName: serializationManager
           .deserialize<String?>(jsonSerialization['lastName']),
+      phoneNumber: serializationManager
+          .deserialize<String?>(jsonSerialization['phoneNumber']),
     );
   }
 
@@ -34,6 +37,8 @@ class User extends _i1.TableRow {
 
   String? lastName;
 
+  String? phoneNumber;
+
   @override
   String get tableName => 'users';
   @override
@@ -42,6 +47,7 @@ class User extends _i1.TableRow {
       'id': id,
       'firstName': firstName,
       'lastName': lastName,
+      'phoneNumber': phoneNumber,
     };
   }
 
@@ -51,6 +57,7 @@ class User extends _i1.TableRow {
       'id': id,
       'firstName': firstName,
       'lastName': lastName,
+      'phoneNumber': phoneNumber,
     };
   }
 
@@ -60,6 +67,7 @@ class User extends _i1.TableRow {
       'id': id,
       'firstName': firstName,
       'lastName': lastName,
+      'phoneNumber': phoneNumber,
     };
   }
 
@@ -77,6 +85,9 @@ class User extends _i1.TableRow {
         return;
       case 'lastName':
         lastName = value;
+        return;
+      case 'phoneNumber':
+        phoneNumber = value;
         return;
       default:
         throw UnimplementedError();
@@ -206,11 +217,14 @@ class UserTable extends _i1.Table {
 
   final lastName = _i1.ColumnString('lastName');
 
+  final phoneNumber = _i1.ColumnString('phoneNumber');
+
   @override
   List<_i1.Column> get columns => [
         id,
         firstName,
         lastName,
+        phoneNumber,
       ];
 }
 

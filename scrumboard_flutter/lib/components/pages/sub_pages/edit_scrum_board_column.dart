@@ -20,7 +20,7 @@ class EditScrumBoardColumnScreen extends StatelessWidget {
       body: GestureDetector(
         onTap: () {
           print("ere");
-          _sendSMS();
+          _sendSMS("");
         },
         child: ScrumBoardColumnEditFormWidget(
           column: column,
@@ -29,7 +29,7 @@ class EditScrumBoardColumnScreen extends StatelessWidget {
     );
   }
 
-  _sendSMS(String body) async {
+  _sendSMS(User) async {
     if (Platform.isAndroid) {
       const uriString = 'sms:+4520280287?body=hello%20there';
       final Uri uri = Uri.parse(uriString);

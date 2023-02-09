@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:scrumboard_client/scrumboard_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SendSmsNotificaion {
-  send(String body) async {
+  final User resipent;
+  SendSmsNotificaion(this.resipent);
+  send(user, String body) async {
     if (Platform.isAndroid) {
-      const uriString = 'sms:+4520280287?body=hello%20there';
+      const uriString = 'sms:${resipent.phoneNumber}?body=hello%20there';
       final Uri uri = Uri.parse(uriString);
       await launchUrl(uri);
     } else if (Platform.isIOS) {

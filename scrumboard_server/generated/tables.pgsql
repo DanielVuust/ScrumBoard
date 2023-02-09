@@ -38,7 +38,8 @@ ALTER TABLE ONLY "scrum_board_column"
 CREATE TABLE "users" (
   "id" serial,
   "firstName" text,
-  "lastName" text
+  "lastName" text,
+  "phoneNumber" text
 );
 
 ALTER TABLE ONLY "users"

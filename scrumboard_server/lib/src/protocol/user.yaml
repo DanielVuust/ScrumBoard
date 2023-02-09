@@ -3,3 +3,4 @@ table: users
 fields:
   firstName: String?
   lastName: String?
+  phoneNumber: String?

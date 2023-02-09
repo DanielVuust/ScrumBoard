@@ -13,6 +13,7 @@ class User extends _i1.SerializableEntity {
     this.id,
     this.firstName,
     this.lastName,
+    this.phoneNumber,
   });
 
   factory User.fromJson(
@@ -25,6 +26,8 @@ class User extends _i1.SerializableEntity {
           .deserialize<String?>(jsonSerialization['firstName']),
       lastName: serializationManager
           .deserialize<String?>(jsonSerialization['lastName']),
+      phoneNumber: serializationManager
+          .deserialize<String?>(jsonSerialization['phoneNumber']),
     );
   }
 
@@ -37,12 +40,15 @@ class User extends _i1.SerializableEntity {
 
   String? lastName;
 
+  String? phoneNumber;
+
   @override
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'firstName': firstName,
       'lastName': lastName,
+      'phoneNumber': phoneNumber,
     };
   }
 }
